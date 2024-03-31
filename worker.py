@@ -19,7 +19,8 @@ def cardio_data():
         params["$offset"] += 1000
 
     return all_data
-def return_classes(para):
+
+def return_topics(para):
     data = cardio_data()
     classkeys = []
     for line in data:
