@@ -60,3 +60,19 @@ curl localhost:5000/jobs/"return_topics" -X POST -d '{}'-H "Content-Type: applic
 ```
 Note: no input parameters are required for this command (as represented by the empty input dictionary "{}").
 return_topics is the function name in the worker.py file. 
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#debugging)
+#  Debugging
+1. For incorrect commands (function calls):
+   After curling an incorrect route (function 1. of Implementation), use function 2. of Implementation to return information about the specific job.
+   The following output will be shown:
+   ```bash
+  {
+  "error": "job not found",
+  "result": {
+    "incorrect function call": "job not submitted"
+  },
+  "status": "error"
+  }
+  ```
+
