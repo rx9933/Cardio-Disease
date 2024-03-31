@@ -46,12 +46,32 @@ def delete_jobs():
         if job_dict['status'] == 'submitted':
             jdb.delete(key)  # Delete the job from the database
 
+
+
+
+def update_job_status(jid, status, output={}):
+    """Update the status of job with job id `jid` to status `status`."""
+    job_dict = get_job_by_id(jid)
+    if job_dict:
+        job_dict['status'] = status
+        job_dict['result'] = output
+        _save_job(jid, job_dict)
+    else:
+        raise Exception()
+
+
+
 def add_job(functName, parameters, status="submitted"):
     # parameters = {} dictionary with required values for calculation
     # functName = string of which function needs to be called in the worker.py file
     """Add a job to the redis queue."""
     jid = _generate_jid()
     job_dict = _instantiate_job(jid, status, functName, parameters)
+
+    worker_functs = ['__annotations__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', 'cardio_data', 'do_work', 'return_classes', 'test_work']
+    if functName not in worker_functs:
+        update_job_status(jid, "error", output={"incorrect function call": "job not submitted"})
+        return
     _save_job(jid, job_dict)
     _queue_job(jid)
     return job_dict
@@ -68,7 +88,7 @@ def get_all_job_ids():
     keys = jdb.keys()  # Get all keys from the job database
     return [key.decode('utf-8') for key in keys]  # Convert keys to strings and return as a list
 
-    
+'''    
 def update_job_status(jid, status, output={}):
     """Update the status of job with job id `jid` to status `status`."""
     job_dict = get_job_by_id(jid)
@@ -78,3 +98,4 @@ def update_job_status(jid, status, output={}):
         _save_job(jid, job_dict)
     else:
         raise Exception()
+'''
