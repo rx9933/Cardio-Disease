@@ -40,7 +40,12 @@ def _queue_job(jid):
 def delete_jobs():
     q.clear()
 #    jdb.flushdb() # add this to remove all jobs (even finished ones)
-    
+    keys = jdb.keys()  # Get all keys (job IDs) from the job database
+    for key in keys:
+        job_dict = json.loads(jdb.get(key))
+        if job_dict['status'] == 'submitted':
+            jdb.delete(key)  # Delete the job from the database
+
 def add_job(functName, parameters, status="submitted"):
     # parameters = {} dictionary with required values for calculation
     # functName = string of which function needs to be called in the worker.py file
@@ -58,6 +63,12 @@ def get_job_by_id(jid):
     except:
         return "error"
 
+def get_all_job_ids():
+    """Return a list of all existing job IDs."""
+    keys = jdb.keys()  # Get all keys from the job database
+    return [key.decode('utf-8') for key in keys]  # Convert keys to strings and return as a list
+
+    
 def update_job_status(jid, status, output={}):
     """Update the status of job with job id `jid` to status `status`."""
     job_dict = get_job_by_id(jid)

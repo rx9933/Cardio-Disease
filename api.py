@@ -1,7 +1,13 @@
 from flask import Flask, request
-from jobs import add_job, get_job_by_id, rd, delete_jobs
+from jobs import add_job, get_job_by_id, get_all_job_ids, rd, delete_jobs
 
 app = Flask(__name__)
+
+@app.route('/jobs', methods=['GET'])
+def all_jobs():
+    all_job_ids = get_all_job_ids()
+#    return jsonify(all_job_ids)
+    return all_job_ids
 
 @app.route('/jobs/<functName>', methods=['POST'])
 def submit_job(functName):

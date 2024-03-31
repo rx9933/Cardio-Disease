@@ -10,7 +10,7 @@ def return_data(jid, job_outdict):
 @q.worker
 def do_work(jobid):
     update_job_status(jobid, 'in progress')
-    time.sleep(10)  # Simulating some work
+    time.sleep(20)  # Simulating some work
     output = {"random output parameter 1": "1st output parameter value"}  # Corrected output format
     status = "complete"
     update_job_status(jobid, status, output)
