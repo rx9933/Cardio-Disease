@@ -5,10 +5,20 @@ import requests
 from jobs import get_job_by_id, update_job_status, q, rd
 
 def cardio_data():
-    response = requests.get("https://data.cdc.gov/resource/ikwk-8git.json")
-    data = response.json()
-    return data
+    url = "https://data.cdc.gov/resource/ikwk-8git.json"
+    params = {"$limit": 1000, "$offset": 0} # updated to return all data (not just first 1000)
+    all_data = []
 
+    # Fetch data using pagination
+    while True:
+        response = requests.get(url, params=params)
+        data = response.json()
+        all_data.extend(data)
+        if len(data) < 1000:
+            break
+        params["$offset"] += 1000
+
+    return all_data
 def return_classes(para):
     data = cardio_data()
     classkeys = []
@@ -18,8 +28,7 @@ def return_classes(para):
                 pass
             else:
                 classkeys += [line["topic"]]
-        else:
-            break
+    print(line)
     return classkeys
 
 def test_work(para):
