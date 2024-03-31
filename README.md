@@ -54,3 +54,9 @@ Returns a list of all job IDs that have been submitted, are in-progress, or are 
 ```bash
 curl localhost:5000/jobs/delete -X DELETE
 ```
+5. To return all the topics of the cardiovascular diseasese:
+```bash
+curl localhost:5000/jobs/"return_topics" -X POST -d '{}'-H "Content-Type: application/json"
+```
+Note: no input parameters are required for this command (as represented by the empty input dictionary "{}").
+return_topics is the function name in the worker.py file. 
