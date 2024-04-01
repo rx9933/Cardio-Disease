@@ -75,4 +75,3 @@ return_topics is the function name in the worker.py file.
     "status": "error"
     }
   ```
-
