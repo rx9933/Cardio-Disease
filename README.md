@@ -67,12 +67,12 @@ return_topics is the function name in the worker.py file.
    After curling an incorrect route (function 1. of Implementation), use function 2. of Implementation to return information about the specific job.
    The following output will be shown:
    ```bash
-  {
-  "error": "job not found",
-  "result": {
-    "incorrect function call": "job not submitted"
-  },
-  "status": "error"
-  }
+    {
+    "error": "job not found",
+    "result": {
+      "incorrect function call": "job not submitted"
+    },
+    "status": "error"
+    }
   ```
 
