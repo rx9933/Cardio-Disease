@@ -6,6 +6,30 @@
 
 <br />
 
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#purpose)
+#  Purpose
+The project aims to illuminate various correlations between behavioral patterns and cardivascular diseases. The app includes:
+1. several endpoints for retrieving specific data subsets, such as by class (cardiovascular rates or risk factors), topic (specific cardiovascular diseases or risk factors), location (states), and breakout category (gender, age, or race)
+2. functionality to post, delete, and retrieve data from a Redis database
+3. visualizations in graphs.
+The app's easy functionality for data visualization allows for widespread access to data patterns and future insights into how lifestyle choices and demographic factors can contribute to cardiovascular health. Ultimately, the app can help inform public health strategies and interventions. 
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#data)
+#  Data
+Data about various behavioral risk factors (leading to cardiavascular disease) is sourced from the CDC: [National Cardiovascular Disease Surveillance Data)](https://data.cdc.gov/Heart-Disease-Stroke-Prevention/Behavioral-Risk-Factor-Surveillance-System-BRFSS-N/ikwk-8git/about_data). The risk surveillance system is provided by the National Cardiovascular Disease Surveillance System, which integrated multiple indicators from different data sources to create a comprehensive list of Cardiovascular Diseases (CVD) and associated risk factors accross the United States (with around 10 years worth of tracking). Data parameters include year (2011 to 2022), location (national, regional, state, selected sites), indicators (obesity, smoking, etc.), type of CVD (i.e. stroke or heart failure), age group, sex, and race. There are approximately 160,160 data points. Data was last updated August 25th, 2023. Data can be accessed in either a csv or json format; for this project, the app uses the csv data format. 
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#foldercontents)
+#  Folder Contents/Program Structure:
+The following files are included for correct deployment of this app:
+1. "api.py": code that includes flask routes that users can curl/access.
+2. "jobs.py": initializes jobs based on user inputs and adds jobs (along with the necessary parameters) to a job queue.
+3. "worker.py": takes jobs off of the job queue, computes the value, and returns the value.
+4. "requirements.txt": the required versions of python libraries (for optimal performance).
+6. "Dockerfile": contains instructions for docker to work (building/running program with the requirements, api, jobs, and worker files).
+7. "docker-compoase.yml":  containerized docker commands (for automation purposes).
+8. "data/": an empty data folder (includes a .gitcanary file to post the relatively empty data/ folder to GitHub). Redis database writes a dump.rdb file to this folder. Empty data/ folder is created for correct write permissions. 
+9. "README.md": this file, describes functionality of the cardiovascular diseases app.
+
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#implementation)
 #  Implementation
 
@@ -82,3 +106,4 @@ return_topics is the function name in the worker.py file.
 * Professor Joe Allen: on providing immediate help for all my questions.
 * [COE 332: Software and Engineering Design Read The Docs](https://coe-332-sp24.readthedocs.io/en/latest/unit05/containers_2.html): on usage (running the program with Linux commands)
 * [CDC: National Cardiovascular Disease Surveillance Data)](https://data.cdc.gov/Heart-Disease-Stroke-Prevention/Behavioral-Risk-Factor-Surveillance-System-BRFSS-N/ikwk-8git/about_data): on providing data.
+* ChatGPT: on writing this README.md.
