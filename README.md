@@ -6,7 +6,7 @@
 
 <br />
 
-[[-----------------------------------------------------]!(https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#purpose)
+[[-----------------------------------------------------!](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#purpose)
 #  Purpose
 The project aims to illuminate various correlations between behavioral patterns and cardivascular diseases. The app includes:
 1. several endpoints for retrieving specific data subsets, such as by class (cardiovascular rates or risk factors), topic (specific cardiovascular diseases or risk factors), location (states), and breakout category (gender, age, or race)
