@@ -82,7 +82,7 @@ curl localhost:5000/jobs/delete -X DELETE
 ```
 5. To return all the topics of the cardiovascular diseasese:
 ```bash
-curl localhost:5000/jobs/"return_topics" -X POST -d '{}'-H "Content-Type: application/json"
+curl -X POST -H "Content-Type: application/json" -d '{}' localhost:5000/jobs/return_topics
 ```
 Note: no input parameters are required for this command (as represented by the empty input dictionary "{}").
 return_topics is the function name in the worker.py file. 
