@@ -1,4 +1,4 @@
-<h1 align="center">Cardiovascular Disease</h1>
+<h1 align="center">*Cardiovascular Disease*</h1>
 <p align="center">
   <b>A containerized Flask-Redis-Kubernetes application that analyzes behavioral risk factors on cardiovascular disease. Final Project for COE332 (Software Engineering and Design).</b></br>
   <sub><sub>
