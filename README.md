@@ -90,6 +90,7 @@ return_topics is the function name in the worker.py file.
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#debugging)
 #  Debugging
 1. For incorrect commands (function calls):
+   
  After curling an incorrect route (function 1. of Implementation), use function 2. of Implementation to return information about the specific job.
  The following output will be shown:
  ```bash
