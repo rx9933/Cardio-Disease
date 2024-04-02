@@ -12,7 +12,9 @@ The project aims to illuminate various correlations between behavioral patterns 
 1. several endpoints for retrieving specific data subsets, such as by class (cardiovascular rates or risk factors), topic (specific cardiovascular diseases or risk factors), location (states), and breakout category (gender, age, or race)
 2. functionality to post, delete, and retrieve data from a Redis database
 3. visualizations in graphs.
-The app's easy functionality for data visualization allows for widespread access to data patterns and future insights into how lifestyle choices and demographic factors can contribute to cardiovascular health. Ultimately, the app can help inform public health strategies and interventions. 
+The app's easy functionality for data visualization allows for widespread access to data patterns and future insights into how lifestyle choices and demographic factors can contribute to cardiovascular health.
+
+Ultimately, the app can help inform public health strategies and interventions. 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#data)
 #  Data
