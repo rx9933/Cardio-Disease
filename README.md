@@ -64,14 +64,21 @@ return_topics is the function name in the worker.py file.
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#debugging)
 #  Debugging
 1. For incorrect commands (function calls):
-   After curling an incorrect route (function 1. of Implementation), use function 2. of Implementation to return information about the specific job.
-   The following output will be shown:
-   ```bash
-    {
-    "error": "job not found",
-    "result": {
-      "incorrect function call": "job not submitted"
-    },
-    "status": "error"
-    }
-  ```
+ After curling an incorrect route (function 1. of Implementation), use function 2. of Implementation to return information about the specific job.
+ The following output will be shown:
+ ```bash
+  {
+  "error": "job not found",
+  "result": {
+    "incorrect function call": "job not submitted"
+  },
+  "status": "error"
+  }
+```
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#contributions)
+#  Contributions
+* Arushi Sadam and Alana Gaughan on creating the program and README.md file. 
+* Professor Joe Allen: on providing immediate help for all my questions.
+* [COE 332: Software and Engineering Design Read The Docs](https://coe-332-sp24.readthedocs.io/en/latest/unit05/containers_2.html): on usage (running the program with Linux commands)
+* [CDC: National Cardiovascular Disease Surveillance Data)](https://data.cdc.gov/Heart-Disease-Stroke-Prevention/Behavioral-Risk-Factor-Surveillance-System-BRFSS-N/ikwk-8git/about_data): on providing data.
