@@ -1,48 +1,51 @@
 import time
-import json  # Add this import
+import json  
 from flask import Flask, request
 import requests 
 from jobs import get_job_by_id, update_job_status, q, rd
 
-def cardio_data():
-    url = "https://data.cdc.gov/resource/ikwk-8git.json"
-    params = {"$limit": 1000, "$offset": 0} # updated to return all data (not just first 1000)
-    all_data = []
-
-    # Fetch data using pagination
-    while True:
-        response = requests.get(url, params=params)
-        data = response.json()
-        all_data.extend(data)
-        if len(data) < 1000:
-            break
-        params["$offset"] += 1000
-
-    return all_data
-
-def return_topics(para):
-    data = cardio_data()
+def return_topics(dict: para):
+    '''
+    Function returns the major topics the catagory Cardiovascular Diseases (stroke, acute myocardial infarction, etc.).
+    Args:
+        para: input parameters (all functions in worker.py (other than do_work) have this as input). For this function, para can be anything, including an empty dictionary.
+    Returns:
+        classkeys: a list of strings, where each string is a cardiovascular disease.
+    '''
     classkeys = []
-    for line in data:
-        if line["category"] == 'Cardiovascular Diseases':
-            if line["topic"] in classkeys:
+    for key in rd.keys():
+        data = json.loads(rd.get(key))
+        if data["category"] == 'Cardiovascular Diseases':
+            if data["topic"] in classkeys:
                 pass
             else:
-                classkeys += [line["topic"]]
-    print(line)
+                classkeys += [data["topic"]]
     return classkeys
 
-def test_work(para):
+def test_work(dict: para):
+    '''
+    This is a test function that simulatees work by sleeping for 20 seconds. 
+    Args:
+        para: input parameters (all functions in worker.py (other than do_work) have this as input). For this function, para can be anything, including an empty dictionary.
+    Returns:
+        output: a dictionary of an example output
+    '''
     time.sleep(20)
     output = {"random output parameter 1": "1st output parameter value"}
     return output
 
 @q.worker
-def do_work(jobid):
+def do_work(str: jobid):
+    '''
+    Main function in worker.py. It calls different worker functions (each of which provides a certain type of analysis). 
+    Args:
+        jobid: a string, which is the jobid of the particular job in the queue
+    Returns:
+        None: the function updates the job with the output data, and when users curl a get route, that information is displayed to the screen. 
+    '''
     update_job_status(jobid, 'in progress')
     job_desc = get_job_by_id(jobid)
     functName = job_desc["function_name"]
-    
     input_para = job_desc["input_parameters"]
     
     output = eval(functName)(input_para)
