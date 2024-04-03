@@ -1,4 +1,4 @@
-import requests 
+import requests
 import redis
 import json
 import os
@@ -10,7 +10,7 @@ app = Flask(__name__)
 @app.route('/jobs', methods=['GET'])
 def all_jobs():
     """
-    Function returns a list of all job ids. 
+    Function returns a list of all job ids.
     Args:
         None
     Returns:
@@ -20,9 +20,9 @@ def all_jobs():
     return all_job_ids
 
 @app.route('/jobs/<functName>', methods=['POST'])
-def submit_job(str:functName):
+def submit_job(functName:str):
     """
-    Function is used to submit jobs to the queue. 
+    Function is used to submit jobs to the queue.
     Args:
         functName: an input function name argument (that will be called in the worker.py file)
     Returns:
@@ -33,9 +33,9 @@ def submit_job(str:functName):
     return job_dict
 
 @app.route('/jobs/<jobid>', methods=['GET'])
-def get_job(str:jobid):
+def get_job(jobid:str):
     """
-    Function returns the status/output of the job. 
+    Function returns the status/output of the job.
     Args:
        jobid: the job's id, a string
     Returns:
@@ -51,11 +51,11 @@ def get_job(str:jobid):
 @app.route('/jobs/delete', methods = ["DELETE"])
 def delete_all_jobs():
     """
-    Function deletes all jobs in queue/not completed. 
+    Function deletes all jobs in queue/not completed.
     Args:
        None.
     Returns:
-       a string that all jobs have been deleted off of the queue. 
+       a string that all jobs have been deleted off of the queue.
     """
     delete_jobs()
     return "all jobs have been deleted off of worker queue. \n"
@@ -63,14 +63,14 @@ def delete_all_jobs():
 '''
 @app.route('/data', methods= ['GET', 'POST', 'DELETE'])
 def edit_redis_data():
-     
-    #Edits the redis database. 
+
+    #Edits the redis database.
     #If method = POST, Posts the data into the redis data base
-    #If method = GET, Returns all data in the db, 
+    #If method = GET, Returns all data in the db,
      #   Outputs: return_list (list), list of dictionaries containing all data in the db
     #if method = DELETE, Deletes all data from db
-    
-    if request.method == 'POST':        
+
+    if request.method == 'POST':
         response = requests.get(url="https://data.cdc.gov/resource/ikwk-8git.json")
         data = response.json()
         for row in data:
@@ -126,7 +126,7 @@ def edit_redis_data():
     if request.method == 'DELETE':
         rd.flushdb()
         return "Data deleted successfully\n"
-    
+
 # Test Route
 @app.route('/envar', methods=['GET'])
 def print_env_var():
