@@ -60,7 +60,7 @@ The following are various curl commands/routes that can be utilized:
 ```bash
 curl localhost:5000/jobs/<"abc"> -X POST -d '{"parameter key 1": input data 1, "parameter key 2": input data 2}' -H "Content-Type: application/json"
 ```
-"abc" should be replaced with a specific worker.py function name, based on the functionality desired of the particular job. View below (worker.py functions) for more details. 
+"abc" should be replaced with a specific worker.py function name, based on the functionality desired of the particular job. View below (Functions section) for more details. 
 The dictionary containing "parameter key 1" and "parameter key 2" is a dictionary of any size (based on the required information for the specific worker.py function). 
 The job's details (including a job-specific, unique ID) will be returned as a dictionary after the job is posted. 
 
@@ -86,6 +86,51 @@ curl -X POST -H "Content-Type: application/json" -d '{}' localhost:5000/jobs/ret
 ```
 Note: no input parameters are required for this command (as represented by the empty input dictionary "{}").
 return_topics is the function name in the worker.py file. 
+
+## Functions
+There are different job functionalities available, based on which worker.py function is called by the user. Currently, the list of job functions are: 
+1. return_topics(): returns the major topics the catagory Cardiovascular Diseases (stroke, acute myocardial infarction, etc.). Does not require any parameteers (input an empty dictionary {})
+   An example curl route would be:
+  ```bash
+  curl localhost:5000/jobs/return_topics -X POST -d '{}' -H "Content-Type: application/json"
+  ```
+  This would return:
+  ```bash
+  {
+    "function_name": "return_topics",
+    "id": "f7125441-ffd6-4489-b6fa-6228a04cd5b4",
+    "input_parameters": {},
+    "status": "submitted"
+  }
+  ```
+  To get the status of the job (via step 2 of ## To Make Requests to Running Container):
+  ```bash
+  curl localhost:5000/jobs/f7125441-ffd6-4489-b6fa-6228a04cd5b4 -X GET
+  ```
+  There are three scenarios in this case:
+  1. if calculation/in-progress work, the command will return:
+  
+  2. if there is no data in the redis database, the following result will be output:
+  ```bash
+  {
+    "function_name": "return_topics",
+    "id": "f7125441-ffd6-4489-b6fa-6228a04cd5b4",
+    "input_parameters": {},
+    "result": [],
+    "status": "complete"
+  }
+ ```
+ 3. if data has been correctly loaded, the following result should be output:
+ ```bash
+  {
+    "function_name": "return_topics",
+    "id": "f7125441-ffd6-4489-b6fa-6228a04cd5b4",
+    "input_parameters": {},
+    "result": [],
+    "status": "complete"
+  }
+ ```
+2. test_work(): simulates work by sleeping for 20 seconds, then returns an arbitrary output message that work has been finished.
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#debugging)
 #  Debugging
