@@ -38,7 +38,7 @@ def edit_redis_data():
     if method = DELETE, Deletes all data from db
     '''
     rd = get_redis_client()
-    if request.method == 'POST':        
+    if request.method == 'POST':
         response = requests.get(url="https://data.cdc.gov/resource/ikwk-8git.json")
         data = response.json()
         for row in data:
