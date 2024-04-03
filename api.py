@@ -39,13 +39,14 @@ def edit_redis_data():
     '''
     rd = get_redis_client()
     if request.method == 'POST':
-        response = requests.get(url="https://data.cdc.gov/resource/ikwk-8git.json")
-        data = response.json()
-        for row in data:
+        return "hello"
+        #response = requests.get(url="https://data.cdc.gov/resource/ikwk-8git.json")
+        #data = response.json()
+        #for row in data:
             # Adding the data to redis as a hash with teh key being teh row id
-            row_id = str(row['row_id'])
-            rd.hset(row_id, mapping=row)
-        return "Data posted successfully"
+            #row_id = str(row['row_id'])
+            #rd.hset(row_id, mapping=row)
+        #return "Data posted successfully"
     if request.method == 'GET':
         return_list = []
         for key in rd.keys():
