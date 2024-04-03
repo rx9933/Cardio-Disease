@@ -4,7 +4,7 @@ services:
   redis-db:
     image: redis:7
     environment:
-      - REDIS_IP=127.0.0.1
+      - REDIS_IP=${REDIS_IP}
     volumes:
       - ./data:/data
     ports:
