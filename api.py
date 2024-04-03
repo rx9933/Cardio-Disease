@@ -37,7 +37,6 @@ def edit_redis_data():
         Outputs: return_list (list), list of dictionaries containing all data in the db
     if method = DELETE, Deletes all data from db
     '''
-    rd = get_redis_client()
     if request.method == 'POST':
         return "hello"
         #response = requests.get(url="https://data.cdc.gov/resource/ikwk-8git.json")
