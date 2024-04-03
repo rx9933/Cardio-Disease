@@ -4,7 +4,7 @@ import redis
 import os
 from hotqueue import HotQueue
 
-_redis_ip = os.environ.get('REDIS_IP', 'redis-db')
+_redis_ip = os.environ.get('REDIS_IP', 'Environment variable does not exist')
 _redis_port = '6379'
 
 rd = redis.Redis(host=_redis_ip, port=6379, db=0)

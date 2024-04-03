@@ -3,8 +3,6 @@ version: "3"
 services:
   redis-db:
     image: redis:7
-    environment:
-      - REDIS_IP=${REDIS_IP}
     volumes:
       - ./data:/data
     ports:
@@ -17,6 +15,8 @@ services:
       context: ./
       dockerfile: Dockerfile
     image: alanarg3/cardio-disease:1.0
+    environment:
+      - REDIS_IP=redis-db
     ports:
       - 5000:5000
     depends_on:
