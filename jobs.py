@@ -11,7 +11,8 @@ rd = redis.Redis(host=_redis_ip, port=6379, db=0)
 q = HotQueue("queue", host=_redis_ip, port=6379, db=1)
 jdb = redis.Redis(host=_redis_ip, port=6379, db=2)
 '''
-_redis_ip = os.environ.get('REDIS_IP', 'Environment variable does not exist')
+#_redis_ip = os.environ.get('REDIS_IP', 'Environment variable does not exist')
+_redis_ip = os.environ.get('REDIS_IP', 'localhost')
 _redis_port = '6379'
 
 rd = redis.Redis(host=_redis_ip, port=6379, db=0)
@@ -28,7 +29,7 @@ def _generate_jid():
     """
     return str(uuid.uuid4())
 
-def _instantiate_job(str:jid, str:status, str:functName, dict:parameters):
+def _instantiate_job(jid:str,status:str, functName:str, parameters:dict):
     """
     Function creates the job object description as a python dictionary. Requires the job id,
     status, start and end parameters.
@@ -46,7 +47,7 @@ def _instantiate_job(str:jid, str:status, str:functName, dict:parameters):
             'input_parameters': parameters,
             }
 
-def _save_job(str:jid, dict:job_dict):
+def _save_job(jid:str,job_dict:dict):
     """
     Function save a job object in the jobs database.
     Args:
@@ -58,7 +59,7 @@ def _save_job(str:jid, dict:job_dict):
     jdb.set(jid, json.dumps(job_dict))
     return 
 
-def _queue_job(str:jid):
+def _queue_job(jid:str):
     """
     Function adds a job to the jobs queue.
     Args:
@@ -86,7 +87,7 @@ def delete_jobs():
             jdb.delete(key)  # Delete the job from the database
     return
 
-def update_job_status(str:jid, str:status, output={}):
+def update_job_status(jid:str, status:str, output={}):
     """
     Function updates the status of job with job id `jid` to status `status`.
     Args:
@@ -110,7 +111,7 @@ def update_job_status(str:jid, str:status, output={}):
         return {"error": "incorrect function call"}
 
 
-def add_job(str:functName, dict:parameters, str:status="submitted"):
+def add_job(functName:str,parameters:dict, status="submitted"):
     """
     Function adds job to queue. Or, if incorrect input function (worker.py function) returns an error.
     Args:
@@ -136,7 +137,7 @@ def add_job(str:functName, dict:parameters, str:status="submitted"):
     _queue_job(jid)
     return job_dict
 
-def get_job_by_id(str:jid):
+def get_job_by_id(jid:str):
     """
     Function return job dictionary (with status and, possibly, an output) given jid.
     Args:

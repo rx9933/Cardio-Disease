@@ -20,7 +20,7 @@ def all_jobs():
     return all_job_ids
 
 @app.route('/jobs/<functName>', methods=['POST'])
-def submit_job(str:functName):
+def submit_job(functName:str):
     """
     Function is used to submit jobs to the queue. 
     Args:
@@ -33,7 +33,7 @@ def submit_job(str:functName):
     return job_dict
 
 @app.route('/jobs/<jobid>', methods=['GET'])
-def get_job(str:jobid):
+def get_job(jobid:str):
     """
     Function returns the status/output of the job. 
     Args:

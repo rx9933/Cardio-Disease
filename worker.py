@@ -4,7 +4,7 @@ from flask import Flask, request
 import requests 
 from jobs import get_job_by_id, update_job_status, q, rd
 
-def return_topics(dict: para):
+def return_topics(para:dict):
     '''
     Function returns the major topics the catagory Cardiovascular Diseases (stroke, acute myocardial infarction, etc.).
     Args:
@@ -22,7 +22,7 @@ def return_topics(dict: para):
                 classkeys += [data["topic"]]
     return classkeys
 
-def test_work(dict: para):
+def test_work(para:dict):
     '''
     This is a test function that simulatees work by sleeping for 20 seconds. 
     Args:
@@ -35,7 +35,7 @@ def test_work(dict: para):
     return output
 
 @q.worker
-def do_work(str: jobid):
+def do_work(jobid:str):
     '''
     Main function in worker.py. It calls different worker functions (each of which provides a certain type of analysis). 
     Args:
