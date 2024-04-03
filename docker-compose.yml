@@ -16,7 +16,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: rx9933/cardio_analysis:1.0
+    image: alanarg3/cardio-disease:1.0
     ports:
       - 5000:5000
     depends_on:
@@ -27,7 +27,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    image: rx9933/cardio_analysis:1.0
+    image: alanarg3/cardio-disease:1.0
     depends_on:
       - redis-db
     command: ["python3", "worker.py"]
