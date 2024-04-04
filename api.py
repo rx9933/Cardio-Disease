@@ -60,26 +60,23 @@ def delete_all_jobs():
     delete_jobs()
     return "all jobs have been deleted off of worker queue. \n"
 
-'''
 @app.route('/data', methods= ['GET', 'POST', 'DELETE'])
 def edit_redis_data():
-
+    """
     #Edits the redis database.
     #If method = POST, Posts the data into the redis data base
     #If method = GET, Returns all data in the db,
      #   Outputs: return_list (list), list of dictionaries containing all data in the db
     #if method = DELETE, Deletes all data from db
-
+    """
     if request.method == 'POST':
         response = requests.get(url="https://data.cdc.gov/resource/ikwk-8git.json")
         data = response.json()
         for row in data:
             # Adding the data to redis as a hash with teh key being teh row id
             row_id = str(row['row_id'])
-            #return {"type row id": str(type(row_id)), "row id" : row_id, "type items": str(type(row.items()))}
+            
             rd.set(row_id, json.dumps(row))
-            #for key, value in row.items():
-            #    rd.hset(row_id, str(key), str(value))
         return "Data posted successfully\n"
     if request.method == 'GET':
         return_list = []
@@ -90,50 +87,41 @@ def edit_redis_data():
     if request.method == 'DELETE':
         rd.flushdb()
         return "Data deleted successfully\n"
-'''
 
-@app.route('/data', methods=['GET', 'POST', 'DELETE'])
-def edit_redis_data():
-    '''
-    Function edits the redis database.
-    If method = POST, Posts the data into the redis data base
-    If method = GET, Returns all data in the db,
-        Outputs: return_list (list), list of dictionaries containing all data in the db
-    if method = DELETE, Deletes all data from db
-    Args:
-        None
-    Returns:
-        a successful data posted message (string): if post request
-        json formatted data: if get request
-        a successful data delted message (string): if delete request
-    '''
-    if request.method == 'POST':
-        response = requests.get(url="https://data.cdc.gov/resource/ikwk-8git.json")
-        data = response.json()
-        for row in data:
-            # Adding the data to redis as a hash with the key being the row id
-            row_id = str(row['row_id'])
-            rd.set(row_id, json.dumps(row))
-        return "Data posted successfully\n"
-
-    if request.method == 'GET':
-        return_list = []
-        for key in rd.keys():
-            key_data = json.loads(rd.get(key))
-            return_list.append(key_data)
-        return json.dumps(return_list)
-
-    if request.method == 'DELETE':
-        rd.flushdb()
-        return "Data deleted successfully\n"
-
-# Test Route
-@app.route('/envar', methods=['GET'])
-def print_env_var():
-    return_dict = {}
-    for k, v in os.environ.items():
-        return_dict[k] = v
-    return return_dict
+#@app.route('/data', methods=['GET', 'POST', 'DELETE'])
+#def edit_redis_data():
+#    """
+#    Function edits the redis database.
+#    If method = POST, Posts the data into the redis data base
+#    If method = GET, Returns all data in the db,
+#        Outputs: return_list (list), list of dictionaries containing all data in the db
+#    if method = DELETE, Deletes all data from db
+#    Args:
+#        None
+#    Returns:
+#        a successful data posted message (string): if post request
+#        json formatted data: if get request
+#        a successful data delted message (string): if delete request
+#    """
+#    if request.method == 'POST':
+#        response = requests.get(url="https://data.cdc.gov/resource/ikwk-8git.json")
+#        data = response.json()
+#        for row in data:
+#            # Adding the data to redis as a hash with the key being the row id
+#            row_id = str(row['row_id'])
+#            rd.set(row_id, json.dumps(row))
+#        return "Data posted successfully\n"
+#
+#    if request.method == 'GET':
+#        return_list = []
+#        for key in rd.keys():
+#            key_data = json.loads(rd.get(key))
+#            return_list.append(key_data)
+#        return json.dumps(return_list)
+#
+#    if request.method == 'DELETE':
+#        rd.flushdb()
+#        return "Data deleted successfully\n"
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
