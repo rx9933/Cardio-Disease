@@ -123,5 +123,15 @@ def edit_redis_data():
 #        rd.flushdb()
 #        return "Data deleted successfully\n"
 
+@app.route('/printenv', methods=['GET'])
+def print_env():
+    """
+    prints the environment variables
+    """
+    return_list = []
+    for k, v in os.environ.items():
+        return_list.append(f'{k}={v}')
+    return return_list
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

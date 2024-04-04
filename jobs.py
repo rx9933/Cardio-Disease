@@ -11,7 +11,7 @@ rd = redis.Redis(host=_redis_ip, port=6379, db=0)
 q = HotQueue("queue", host=_redis_ip, port=6379, db=1)
 jdb = redis.Redis(host=_redis_ip, port=6379, db=2)
 '''
-_redis_ip = os.environ.get('REDIS_IP', 'Environment variable does not exist')
+_redis_ip = os.environ.get('REDIS_IP')
 #_redis_ip = os.environ.get('REDIS_IP', 'localhost')
 _redis_port = '6379'
 
