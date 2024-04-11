@@ -68,7 +68,7 @@ def _save_job(jid, job_dict):
     job_dict = dict(job_dict)
     jdb.set(jid, json.dumps(job_dict))
 
-    
+
 def _queue_job(jid:str):
     """
     Function adds a job to the jobs queue.
@@ -182,6 +182,15 @@ def get_all_job_ids():
     """
     keys = jdb.keys()  # Get all keys from the job database
     return [key.decode('utf-8') for key in keys]  # Convert keys to strings and return as a list
+
+
+
+
+
+
+
+
+
 
 
 

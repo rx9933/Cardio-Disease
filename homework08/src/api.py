@@ -3,7 +3,7 @@ import requests
 import redis
 import json
 import os
-from flask import Flask, request, jsonify 
+from flask import Flask, request, jsonify
 from jobs import add_job, get_job_by_id, get_all_job_ids, rd, delete_jobs, jdb
 from worker import res_db
 #from jobs import res_db
@@ -82,7 +82,7 @@ def submit_job(functName:str):
                 x = data[elem]
             except:
                 data[elem] = ""
-            
+
         # Add job to the queue
     job_dict = add_job(functName, data)
     return job_dict
@@ -179,25 +179,25 @@ def edit_redis_data():
     If method = GET, Returns all data in the db,
         Outputs: return_list (list), list of dictionaries containing all da    keys_input = ["topic", "year", "gender", "a"]
     keys_to_remove = []
-    
+
     for spec in keys_input:
         logging.warning(f"spec = {spec}")
         if para[spec] == "":
             logging.warning(f"deleting one input para {spec}")
             keys_to_remove.append(spec)
         logging.warning(f"para['year'] {para['year']}")
-    
+
     for key in keys_to_remove:
         keys_input.remove(key)
-    
+
     return keys_inputta in the db
     if method = DELETE, Deletes all data from db
-    Args: 
+    Args:
         None
     Returns:
         str : message about data being posted or deleted from redis
         OR
-        list: of all dictionary data 
+        list: of all dictionary data
     """
     if request.method == 'POST':
 
@@ -236,4 +236,14 @@ def edit_redis_data():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
+
+
+
+
+
+
+
+
+
+
 
