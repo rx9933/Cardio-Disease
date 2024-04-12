@@ -11,11 +11,12 @@
 The project aims to illuminate various correlations between behavioral patterns and cardiovascular diseases. The app will include:
 1. several endpoints for retrieving specific data subsets, such as by class (cardiovascular rates or risk factors), topic (specific cardiovascular diseases or risk factors), location (states), and breakout category (gender, age, or race)
 2. functionality to post, delete, and retrieve data from a Redis database
-3. visualizations in graphs.
+3. various data analysis (calculating most affected populations to specific diseases). 
+4. visualizations in graphs.
 The app's easy functionality for data visualization will allow for widespread access to data patterns and future insights into how lifestyle choices and demographic factors can contribute to cardiovascular health.
 Ultimately, the app can help inform public health strategies and interventions.
 
-Currently, step 2 (redis database functionality) is supported along with two other functions: one to simulate work/analysis being done and one to return the major cardiovascular diseases that are measured/parameters in the data file. 
+Step 1 is currently being developed/improved while step 4 will be implemented in the future. 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#data)
 #  Data
@@ -27,11 +28,14 @@ The following files are included for correct deployment of this app:
 1. "api.py": code that includes flask routes that users can curl/access.
 2. "jobs.py": initializes jobs based on user inputs and adds jobs (along with the necessary parameters) to a job queue.
 3. "worker.py": takes jobs off of the job queue, computes the value, and returns the value.
-4. "requirements.txt": the required versions of python libraries (for optimal performance).
-6. "Dockerfile": contains instructions for docker to work (building/running program with the requirements, api, jobs, and worker files).
-7. "docker-compoase.yml":  containerized docker commands (for automation purposes).
-8. "data/": an empty data folder (includes a .gitcanary file to post the relatively empty data/ folder to GitHub). Redis database writes a dump.rdb file to this folder. Empty data/ folder is created for correct write permissions. 
-9. "README.md": this file, describes the functionality of the cardiovascular disease app.
+4. "test_api.py": code to test api.py.
+5. "test_jobs.py": code to test jobs.py.
+6. "test_worker.py": code to test worker.py.'
+7. "requirements.txt": the required versions of python libraries (for optimal performance).
+8. "Dockerfile": contains instructions for docker to work (building/running program with the requirements, api, jobs, and worker files).
+9. "docker-compoase.yml":  containerized docker commands (for automation purposes).
+10. "data/": an empty data folder (includes a .gitcanary file to post the relatively empty data/ folder to GitHub). Redis database writes a dump.rdb file to this folder. Empty data/ folder is created for correct write permissions. 
+11. "README.md": this file, describes the functionality of the cardiovascular disease app.
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#implementation)
 #  Implementation
@@ -41,7 +45,7 @@ The following files are included for correct deployment of this app:
 ```bash
 git clone git@github.com:rx9933/COE-332-Homework.git
 ```
-2. Navigate to this directory (homework07). 
+2. Navigate to this directory (homework08). 
 3. To run program:
 ```bash
 docker-compose up -d
