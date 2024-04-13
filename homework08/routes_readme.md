@@ -323,6 +323,7 @@ There are currently 3 job functions that can be run. Note that these are in addi
 ```bash
 pytest
 ```
+Due to the large number of tests being done, the test command may take around 7 minutes to complete.
 Note: a different terminal (as long as it has Docker installed and has been navigated to the homework08 directory) can run the <pytest> command, as long as the docker image has been correctly pulled and is running (view "To Build Image").
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#debugging)
