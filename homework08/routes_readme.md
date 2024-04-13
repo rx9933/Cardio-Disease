@@ -1,4 +1,4 @@
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)]
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#routes)
 # Routes
 1. Redis Functionality
     * To add data to Redis:
@@ -59,7 +59,7 @@
    "specific_job_id" should be replaced with the desired job ID. View "To add a job" and "To list all existing jobs" for information on retrieving specific job IDs. 
      *Note*: interesting results will only be output when the job is complete; check for completion status with the previous command. 
    
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)]
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#jobfunctions)
 # Job Functions
 There are currently 3 job functions that can be run. Note that these are in addition to the flask routes detailed in Redis Functionality (1). Each of the commands listed in Job Functionality can be applied to each of the 3 jobs (test_work, return_topics, and max_affected). *Note*: for the example routes shown below, the job id should be replaced with the job id that the user's receive to screen. 
 1. test_work: this function is just a work simulation. No real analysis is performed; the worker just sleeps for 20 seconds before returning a random output.
@@ -239,7 +239,7 @@ There are currently 3 job functions that can be run. Note that these are in addi
    ```
    
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)]
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#unittesting)
 # Unit Testing
 1. Follow "To Build Image", then, in the same directory as the homework08 repository, run the following command:
 ```bash
@@ -247,7 +247,8 @@ pytest
 ```
 Note: a different terminal (as long as it has Docker installed and has been navigated to the homework08 directory) can run the <pytest> command, as long as the docker image has been correctly pulled and is running (view "To Build Image").
 
-[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)]
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#debugging)
+# Debugging
 ## Launching Containers
 * If the following error appears:
  ```bash
