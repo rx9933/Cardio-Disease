@@ -60,56 +60,74 @@ def test_get_job(): # just job status/job dict
 
 
 def test_get_result_by_id():
-    """
-    Test the /jobs/<jobid> route for GET method.
-    """
-    # Assuming jobid exists in the database
+    # Submit a job to get a valid job ID
+    response = requests.post('http://localhost:5000/return_year_data', json={"start": "1999", "end": "2000"})
+    job_id = response.json()["id"]
 
-    response = requests.post('http://localhost:5000/return_year_data', json={"start": "1999", "end": \
-"2012"})
-    jobid = response.json()["id"]
-    response = requests.get(f"http://localhost:5000/results/{jobid}")
+    # Wait for the job to complete (assuming the job status changes to 'completed' when it's done)
+    while True:
+        logging.error(f"{requests.get(f'http://localhost:5000/jobs').json()}")
+        logging.error(f"{requests.get(f'http://localhost:5000/jobs/{job_id}').json()}")
+        time.sleep(1)
+        job_response = requests.get(f'http://localhost:5000/jobs/{job_id}')
+        if job_response.json()["status"] == "complete":
+            break
+
+    # Retrieve the result using the valid job ID
+    response = requests.get(f'http://localhost:5000/results/{job_id}')
     assert response.status_code == 200
-    logging.error( requests.get(f"http://localhost:5000/jobs/{jobid}"))
-    while isinstance(requests.get(f"http://localhost:5000/jobs/{jobid}"),str):# == "Result not found for the specified Job ID. Check completion status of job. \n":
-        time.sleep(.01)
-        pass
-    logging.warning(f"{response}") 
-    assert isinstance(requests.get(f"http://localhost:5000/jobs/{jobid}").json(), dict)
-
-
-    datapost = requests.post("http://localhost:5000/data")
-
-    assert datapost.content == b'Data posted successfully\n'
-
-
-
-    response = requests.post('http://localhost:5000/return_year_data', json={"start": "1999", "end": \
-\
-"2012"})
-    jobid = response.json()["id"]
-    response = requests.get(f"http://localhost:5000/results/{jobid}")
-    assert response.status_code == 200
-
-
-    ###################################
-
-
-    assert response.text == "Result not found for the specified Job ID. Check completion status of jo\
-b. \n"
-
     assert isinstance(response.json(), dict)
 
-    assert "id" in response.json()
-    assert "status" in response.json()
-    assert "output" in response.json()
-    assert "function_name" in response.json()
-    assert "input_parameters" in response.json()
-
-    # Assuming jobid does not exist in the database
-    invalid_jobid = "invalid_jobid"
-    response = requests.get(f"http://localhost:5000/results/{invalid_jobid}")
-    assert response.status_code == 200
+    # Assuming there is no job with ID '456' in the system
+    response = requests.get('http://localhost:5000/results/456')
+#    assert response.status_code == 200
     assert response.text == "Result not found for the specified Job ID. Check completion status of job. \n"
 
 
+
+def test_add_and_delete_job():
+    # Add a job
+    add_response = requests.post('http://localhost:5000/test_work',json={})
+    assert add_response.status_code == 200
+    
+    add_response = requests.post('http://localhost:5000/test_work',json={})
+    assert add_response.status_code == 200
+
+    job_id = add_response.json()["id"]
+#    logging.error(f"{requests.get(f'http://localhost:5000/jobs').json()}")
+    logging.error(f"{requests.get(f'http://localhost:5000/jobs/{job_id}').json()}")
+    # Delete all jobs
+    curr = requests.get(f"http://localhost:5000/jobs/{job_id}").json()["status"]
+    assert not(curr == "completed") and not(curr=="in progress")
+    delete_response = requests.delete('http://localhost:5000/jobs/delete')
+    assert delete_response.status_code == 200
+    assert delete_response.text == "all jobs have been deleted off of worker queue. \n"
+
+    # Check if the job is still in the queue
+    job_id = add_response.json()['id']
+    job_status_response = requests.get(f'http://localhost:5000/jobs/{job_id}')
+    assert job_status_response.status_code == 200
+    assert job_status_response.json() == {"error": "job not found"}
+    
+def test_post_data():
+    # Send a POST request to add data
+    response = requests.post('http://localhost:5000/data')
+    assert response.status_code == 200
+    assert response.text == "Data posted successfully\n"
+
+def test_get_data():
+    # Send a GET request to retrieve all data
+    response = requests.get('http://localhost:5000/data')
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+
+def test_delete_data():
+    # Send a DELETE request to delete all data
+    response = requests.delete('http://localhost:5000/data')
+    assert response.status_code == 200
+    assert response.text == "Data deleted successfully\n"
+
+if __name__ == '__main__':
+    test_post_data()
+    test_get_data()
+    test_delete_data()

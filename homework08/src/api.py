@@ -33,15 +33,9 @@ def all_jobs():
     all_job_ids = get_all_job_ids()
     return all_job_ids
 
-
+"""
 def validate_year(data):
-    """
-    Function is used to check validity of input data for return_year_data function in worker. py
-    Args:
-        data: job input data (dict or list of dicts)
-    Returns:
-        boolean: True if input data is valid, False otherwise
-    """
+   
     if "start" not in data or "end" not in data:
         return False
     try:
@@ -51,7 +45,7 @@ def validate_year(data):
         logger.warning(f"Correct input parameters not submitted by user for '{functName}'.")
         return False
     return True
-
+"""
 
 
 @app.route('/<functName>', methods=['POST'])
@@ -67,16 +61,26 @@ def submit_job(functName:str):
     worker_functs = ["return_topics", "return_year_data", "test_work","max_affected"]
     if not(functName in worker_functs):
          return jsonify({"error": "Invalid function name."}), 400
-    if functName == "return_year_data":
-        data = request.get_json()
-        if not validate_year(data):
-            return jsonify({"error": "Invalid input. Please provide 'start' and 'end' as strings of integers. For example {'start':'1999', 'end':'2000'}"}), 400
-
+    should_continue = True
+    data = request.get_json()
+     
     if functName == "return_topics":
         data = {} # no data needed
-    if functName == "max_affected":
-        data = request.get_json()
-        paras = ["topic", "year","gender"]
+
+    elif functName == "test_work":
+        data = {}
+        
+    elif functName == "return_year_data":
+        try:
+            x = int(data["start"])
+            y = int(data["end"])
+        except:
+            should_continue = False
+            return jsonify({"error": "Invalid input. Please provide 'start' and 'end' as strings of integers. For example {'start':'1999','end':'2000'}"}), 400
+
+    elif functName == "max_affected":
+
+        paras = ["topic", "year","break_out"]
         for elem in paras:
             try:
                 x = data[elem]
@@ -84,8 +88,9 @@ def submit_job(functName:str):
                 data[elem] = ""
 
         # Add job to the queue
-    job_dict = add_job(functName, data)
-    return job_dict
+    if should_continue:
+        job_dict = add_job(functName, data)
+        return job_dict
 
 @app.route('/jobs/<jid>', methods=['GET'])
 def get_job_by_id(jid:str):
