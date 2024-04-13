@@ -46,17 +46,12 @@ def max_affected(para: dict):
     maxpercent = None
     for key in rd.keys():
         data = json.loads(rd.get(key))
-#        logging.warning(f"{data}")
         if data["category"] == 'Cardiovascular Diseases':
-            logging.error(f"{keys_to_keep}")
-#            logging.error(f'{data["gender"]}')
-            
             correct_type = all(data[spec] == para[spec] for spec in keys_to_keep)
 
             if correct_type and "data_value" in data:
                 if maxpercent is None or float(data["data_value"]) > float(maxpercent["data_value"]):
                     maxpercent = data
-#                    logging.warning(f"max_percent={maxpercent}")
     if maxpercent is None:
         return "No data of this type can be found to analyze.\n"
     return maxpercent

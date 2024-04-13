@@ -34,7 +34,7 @@ def test_submit_job():
     """
     Test the /<functName> route for POST method.
     """
-    response = requests.post('http://localhost:5000/return_year_data', json={"start": "1999", "end": "2000"})
+    response = requests.post('http://localhost:5000/max_affected', json={"year": "2000"})
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
     assert "id" in response.json()
@@ -51,7 +51,7 @@ def test_invalid_function_name():
     assert response.json() == {"error": "Invalid function name."}
 
 def test_get_job(): # just job status/job dict
-    response = requests.post('http://localhost:5000/return_year_data', json={"start": "1999", "end": "2000"})
+    response = requests.post('http://localhost:5000/return_topics', json={"start": "1999", "end": "2000"})
     keys = [ "function_name", "id", "input_parameters", "status"]
     assert set(keys) == set(list(response.json().keys()))
     response = requests.post('http://localhost:5000/max_affected', json={})
@@ -61,13 +61,15 @@ def test_get_job(): # just job status/job dict
 
 def test_get_result_by_id():
     # Submit a job to get a valid job ID
-    response = requests.post('http://localhost:5000/return_year_data', json={"start": "1999", "end": "2000"})
+    response = requests.post('http://localhost:5000/data')
+    assert response.status_code == 200
+    assert response.text == "Data posted successfully\n"
+    
+    response = requests.post('http://localhost:5000/return_topics', json={"start": "1999", "end": "2000"})
     job_id = response.json()["id"]
-
+    
     # Wait for the job to complete (assuming the job status changes to 'completed' when it's done)
     while True:
-        logging.error(f"{requests.get(f'http://localhost:5000/jobs').json()}")
-        logging.error(f"{requests.get(f'http://localhost:5000/jobs/{job_id}').json()}")
         time.sleep(1)
         job_response = requests.get(f'http://localhost:5000/jobs/{job_id}')
         if job_response.json()["status"] == "complete":
@@ -76,7 +78,10 @@ def test_get_result_by_id():
     # Retrieve the result using the valid job ID
     response = requests.get(f'http://localhost:5000/results/{job_id}')
     assert response.status_code == 200
-    assert isinstance(response.json(), dict)
+    assert isinstance(response.json(), list)
+    logging.error(f"{response.json()}")
+    logging.error(f"{response.json()[0]}")
+    assert isinstance(response.json()[0],str)
 
     # Assuming there is no job with ID '456' in the system
     response = requests.get('http://localhost:5000/results/456')
@@ -126,8 +131,11 @@ def test_delete_data():
     response = requests.delete('http://localhost:5000/data')
     assert response.status_code == 200
     assert response.text == "Data deleted successfully\n"
-
+"""
 if __name__ == '__main__':
     test_post_data()
     test_get_data()
     test_delete_data()
+    test_get_result_by_id()
+
+"""

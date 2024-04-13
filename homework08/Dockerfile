@@ -6,6 +6,6 @@ COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 
-COPY test/test_api.py src/api.py src/worker.py src/jobs.py ./
+COPY test/test_api.py test/test_worker.py src/api.py src/worker.py src/jobs.py ./
 
 CMD ["python3"]
