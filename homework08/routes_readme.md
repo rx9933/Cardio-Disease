@@ -1,5 +1,66 @@
+<h1 align="center">Cardiovascular Disease</h1>
+<p align="center">
+  <b>A containerized Flask-Redis application that analyzes behavioral risk factors on cardiovascular disease. Start of Final Project for COE332 (Software Engineering and Design).</b></br>
+  <sub><sub>
+</p>
+
+<br />
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#purpose)
+#  Purpose
+The project aims to illuminate various correlations between behavioral patterns and cardiovascular diseases. The app will include:
+1. several endpoints for retrieving specific data subsets, such as by class (cardiovascular rates or risk factors), topic (specific cardiovascular diseases or risk factors), location (states), and breakout category (gender, age, or race)
+2. functionality to post, delete, and retrieve data from a Redis database
+3. various data analysis (calculating most affected populations to specific diseases). 
+4. visualizations in graphs.
+The app's easy functionality for data visualization will allow for widespread access to data patterns and future insights into how lifestyle choices and demographic factors can contribute to cardiovascular health.
+Ultimately, the app can help inform public health strategies and interventions.
+
+Step 1 is currently being developed/improved while step 4 will be implemented in the future. 
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#data)
+#  Data
+Data about various behavioral risk factors (leading to cardiovascular disease) is sourced from the CDC: [National Cardiovascular Disease Surveillance Data)](https://data.cdc.gov/Heart-Disease-Stroke-Prevention/Behavioral-Risk-Factor-Surveillance-System-BRFSS-N/ikwk-8git/about_data). The risk surveillance system is provided by the National Cardiovascular Disease Surveillance System, which integrated multiple indicators from different data sources to create a comprehensive list of Cardiovascular Diseases (CVD) and associated risk factors across the United States (with around 10 years worth of tracking). Data parameters include year (2011 to 2022), location (national, regional, state, selected sites), indicators (obesity, smoking, etc.), type of CVD (i.e. stroke or heart failure), age group, sex, and race. There are approximately 160,160 data points. Data was last updated August 25th, 2023. Data can be accessed in either a csv or json format; for this project, the app uses the csv data format.
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#foldercontents)
+#  Folder Contents/Program Structure:
+The following files are included for correct deployment of this app:
+1. "api.py": code that includes flask routes that users can curl/access.
+2. "jobs.py": initializes jobs based on user inputs and adds jobs (along with the necessary parameters) to a job queue.
+3. "worker.py": takes jobs off of the job queue, computes the value, and returns the value.
+4. "test_api.py": code to test api.py.
+5. "test_jobs.py": code to test jobs.py.
+6. "test_worker.py": code to test worker.py.'
+7. "requirements.txt": the required versions of python libraries (for optimal performance).
+8. "Dockerfile": contains instructions for docker to work (building/running program with the requirements, api, jobs, and worker files).
+9. "docker-compose.yml":  containerized docker commands (for automation purposes).
+10. "data/": an empty data folder (includes a .gitcanary file to post the relatively empty data/ folder to GitHub). Redis database writes a dump.rdb file to this folder. Empty data/ folder is created for correct write permissions. 
+11. "README.md": this file, describes the functionality of the cardiovascular disease app.
+
+[![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#implementation)
+#  Implementation
+
+## To Build Image
+1. Clone this repository:
+```bash
+git clone git@github.com:rx9933/COE-332-Homework.git
+```
+2. Navigate to this directory (homework08). 
+3. To run program:
+```bash
+docker-compose up -d
+```
+Leave the program running while proceeding with Making Requests to Container. Only use "To stop program" when done interacting with app.
+
+4. To stop program:
+```bash
+docker-compose down
+```
+
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#routes)
 # Routes
+Note: Proceed only if "To Build Image" is complete and the app is running (step 3). 
+The following are various curl commands/routes that can be utilized: 
 1. Redis Functionality
     * To add data to Redis:
     ```bash
