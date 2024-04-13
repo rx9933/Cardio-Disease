@@ -69,16 +69,6 @@ def submit_job(functName:str):
 
     elif functName == "test_work":
         data = {}
-"""        
-    elif functName == "return_year_data":
-        try:
-            x = int(data["start"])
-            y = int(data["end"])
-        except:
-            should_continue = False
-            return jsonify({"error": "Invalid input. Please provide 'start' and 'end' as strings of integers. For example {'start':'1999','end':'2000'}"}), 400
-"""
-
     elif functName == "max_affected":
 
         paras = ["topic", "year","break_out"]
