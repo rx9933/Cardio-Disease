@@ -39,29 +39,6 @@ def return_topics(para:dict):
     logger.info("Returning topics")
     return classkeys
 
-def return_year_data(para: dict):
-    '''
-    Function returns the data from the Redis database based on the specified year range.
-    Args:
-        para: input parameters containing 'start' and 'end' representing the year range.
-    Returns:
-        data_dict: a dictionary where keys are RowId and values are dictionaries containing the     data within the specified year range.
-    '''
-    logger.info("Getting year data")
-    start_year = para['start']
-    end_year = para['end']
-    data_dict = {}
-    index = 0
-    for key in rd.keys():
-        data = json.loads(rd.get(key))
-
-        yr = data['year']
-        if yr is not None and int(start_year) <= int(yr) <= int(end_year):
-            data_dict[index] = data
-            index+=1
-    logger.info("Returning year data")
-    return data_dict
-
 def max_affected(para: dict):
     keys_input = ["topic", "year", "break_out"]
     keys_to_keep = [key for key in keys_input if para[key] != ""]

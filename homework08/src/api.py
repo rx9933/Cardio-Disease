@@ -58,7 +58,7 @@ def submit_job(functName:str):
         job_dict: a dictionary of the job information (the input parameters, function name, current status (submitted), etc.)
     """
     logger.info(f"Received POST request for job '{functName}'.")
-    worker_functs = ["return_topics", "return_year_data", "test_work","max_affected"]
+    worker_functs = ["return_topics","test_work","max_affected"]
     if not(functName in worker_functs):
          return jsonify({"error": "Invalid function name."}), 400
     should_continue = True
@@ -69,7 +69,7 @@ def submit_job(functName:str):
 
     elif functName == "test_work":
         data = {}
-        
+"""        
     elif functName == "return_year_data":
         try:
             x = int(data["start"])
@@ -77,6 +77,7 @@ def submit_job(functName:str):
         except:
             should_continue = False
             return jsonify({"error": "Invalid input. Please provide 'start' and 'end' as strings of integers. For example {'start':'1999','end':'2000'}"}), 400
+"""
 
     elif functName == "max_affected":
 
@@ -92,7 +93,7 @@ def submit_job(functName:str):
         job_dict = add_job(functName, data)
         return job_dict
 
-@app.route('/jobs/<jid>', methods=['GET'])
+#@app.route('/jobs/<jid>', methods=['GET'])
 def get_job_by_id(jid:str):
     """
     Function return job dictionary (with status and, possibly, an output) given jid.
@@ -238,6 +239,38 @@ def edit_redis_data():
     if request.method == 'DELETE':
         rd.flushdb()
         return "Data deleted successfully\n"
+
+
+@app.route('/year_data', methods=['GET'])
+def return_year_data():
+    '''
+    Function returns the data from the Redis database based on the specified year range.
+    Args:
+        start_year (int): The start year of the range.
+        end_year (int): The end year of the range.
+    Returns:
+        data_dict: A dictionary where keys are RowId and values are dictionaries containing the data within the specified year range.
+    '''
+    try:
+        start_year = int(request.args.get('start'))
+    except:
+        start_year = 0
+    try:
+        end_year = int(request.args.get('end'))
+    except:
+        end_year = 5000
+    logger.info("Getting year data")
+    data_dict = {}
+    index = 0
+    for key in rd.keys():
+        data = json.loads(rd.get(key))
+        yr = data.get('year')
+        if yr is not None and start_year <= int(yr) <= end_year:
+            data_dict[index] = data
+            index += 1
+    logger.info("Returning year data")
+    return jsonify(data_dict)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
