@@ -29,9 +29,13 @@
       curl "localhost:5000/year_data?start=2017&end=2020"
     ```
     Note that start and end parameters are optional (users can provide either start or end or neither/both of the parameters). Start represents the start of the data being returned (in this case, data after and during 2017 is returned) while end represents the end of the data being returned (in this case, data during 2020 and before is returned). If no parameters are input, the entire dataset will be returned, like in "To retrieve data from Redis".
+   
    Also note the quotation marks in this command: if both parameters are input, quotes are required. If only one parameter or no parameters are input, then no quotes are necessary.
+   
    This command will return a long list set of dictionaries, where each dictionary represents a data point.
+   
    If invalid start/end parameters are input, then for whichever invalid input, the default value will be set: start will be assigned to year 0 and/or end will be assigned to year 5000 (thus the entire data set might be returned).
+   
    Valid inputs that lead to no data (i.e., start=2024 and end = 2020 or start = 8 and end = 10) will result in the following being output to screen:
    ```bash
    {}
