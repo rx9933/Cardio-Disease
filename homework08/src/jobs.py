@@ -1,28 +1,27 @@
+import logging
 import json
 import uuid
 import redis
 import os
 from hotqueue import HotQueue
-'''
-_redis_ip = os.environ.get('REDIS_IP', 'redis-db')
+#from worker import res_db
+
+_redis_ip = os.environ.get('REDIS_IP','environment not found')
 _redis_port = '6379'
 
 rd = redis.Redis(host=_redis_ip, port=6379, db=0)
 q = HotQueue("queue", host=_redis_ip, port=6379, db=1)
 jdb = redis.Redis(host=_redis_ip, port=6379, db=2)
-'''
-<<<<<<< HEAD
-_redis_ip = os.environ.get('REDIS_IP')
-#_redis_ip = os.environ.get('REDIS_IP', 'localhost')
-=======
-#_redis_ip = os.environ.get('REDIS_IP', 'Environment variable does not exist')
-_redis_ip = os.environ.get('REDIS_IP', 'localhost')
->>>>>>> 274ab8f1c0a44527ef980835aecc54be18d15fce
-_redis_port = '6379'
 
-rd = redis.Redis(host=_redis_ip, port=6379, db=0)
-q = HotQueue("queue", host=_redis_ip, port=6379, db=1)
-jdb = redis.Redis(host=_redis_ip, port=6379, db=2)
+
+
+# Read the log level from the environment variable
+log_level = os.environ.get('LOG_LEVEL', 'INFO')
+
+# Configure logging
+logging.basicConfig(level=log_level)
+logger = logging.getLogger(__name__)
+
 
 def _generate_jid():
     """
@@ -51,7 +50,7 @@ def _instantiate_job(jid:str,status:str, functName:str, parameters:dict):
             'function_name': functName,
             'input_parameters': parameters,
             }
-
+'''
 def _save_job(jid:str,job_dict:dict):
     """
     Function save a job object in the jobs database.
@@ -63,6 +62,12 @@ def _save_job(jid:str,job_dict:dict):
     """
     jdb.set(jid, json.dumps(job_dict))
     return
+'''
+def _save_job(jid, job_dict):
+    # Convert dict_keys to list
+    job_dict = dict(job_dict)
+    jdb.set(jid, json.dumps(job_dict))
+
 
 def _queue_job(jid:str):
     """
@@ -108,11 +113,10 @@ def update_job_status(jid:str, status:str, output={}):
     if job_dict:
         new_job_dict = job_dict.copy()  # Create a copy of the job dictionary
         new_job_dict['status'] = status
-        new_job_dict['result'] = output
         _save_job(jid, new_job_dict)  # Save the updated job dictionary
         return job_dict
     else:
-#        raise Exception()
+        logger.error("Job with ID %s not found when updating status", jid)
         return {"error": "incorrect function call"}
 
 
@@ -132,8 +136,9 @@ def add_job(functName:str,parameters:dict, status="submitted"):
     jid = _generate_jid()
     job_dict = _instantiate_job(jid, status, functName, parameters)
 
-    worker_functs = ['__annotations__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', 'cardio_data', 'do_work', 'return_topics', 'test_work']
+    worker_functs = ['__annotations__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', 'cardio_data', 'do_work', 'return_topics', 'test_work','max_affected']
     if functName not in worker_functs:
+         logger.warning("Incorrect function call for job with ID %s", jid)
          update_job_status(jid, "error", output={"incorrect function call": "job not submitted"})
  #       return job_dict
          job_dict['error'] = "incorrect function call"
@@ -152,11 +157,20 @@ def get_job_by_id(jid:str):
         OR:
         an dictionary with an error message, if the job id does not exist
     """
+    """
+    result = res_db.get(jid)
+    if result is not None:
+        return json.loads(result)
+    else:
+        return {"error": "result not found"}
+    """
     job_dict = jdb.get(jid)
     if job_dict is not None:
         return json.loads(job_dict)
     else:
+        logger.warning("Job with ID %s not found", jid)
         return {"error":"job not found"}  # Return an empty dictionary if job not found
+
 
 def get_all_job_ids():
     """
@@ -168,5 +182,16 @@ def get_all_job_ids():
     """
     keys = jdb.keys()  # Get all keys from the job database
     return [key.decode('utf-8') for key in keys]  # Convert keys to strings and return as a list
+
+
+
+
+
+
+
+
+
+
+
 
 
