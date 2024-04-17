@@ -1,4 +1,4 @@
-<h1 align="center">Cardiovascular Disease</h1>
+<h1 align="center">Homework 08: Cardiovascular Disease</h1>
 <p align="center">
   <b>A containerized Flask-Redis application that analyzes behavioral risk factors on cardiovascular disease. Start of Final Project for COE332 (Software Engineering and Design).</b></br>
   <sub><sub>
@@ -328,10 +328,24 @@ There are currently 3 job functions that can be run. Note that these are in addi
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#unittesting)
 # Unit Testing
-1. Follow "To Build Image", then, in the same directory as the homework08 repository, run the following command:
+1. Follow "To Build Image", then, to identify the image being used, run the following command:
 ```bash
-pytest
+docker ps -a
 ```
+This will return the docker containers that are currently running. The command should result in an output similar to :
+```bash
+CONTAINER ID   IMAGE                       COMMAND                  CREATED          STATUS          PORTS                                       NAMES
+b28c1290cef1   rx9933/cardio-disease:2.0   "python3 worker.py"      20 seconds ago   Up 18 seconds                                               homework08_worker_1
+d3d4d32bb5bc   rx9933/cardio-disease:2.0   "python3 api.py"         20 seconds ago   Up 19 seconds   0.0.0.0:5000->5000/tcp, :::5000->5000/tcp   homework08_flask-api_1
+dd90c9d27722   redis:7                     "docker-entrypoint.s…"   20 seconds ago   Up 19 seconds   0.0.0.0:6379->6379/tcp, :::6379->6379/tcp   homework08_redis-db_1
+```
+"rx9933/cardio-disease:2.0" is the name of the image that is being used. d3d4d32bb5bc is the container ID for the api (note this value). 
+
+2. Run the pytest command via:
+```bash
+docker exec -it d3d4d32bb5bc pytest
+```
+Replace d3d4d32bb5bc with the api container id as found in the previous step.
 Due to the large number of tests being done, the test command may take around 7 minutes to complete.
 Note: a different terminal (as long as it has Docker installed and has been navigated to the homework08 directory) can run the <pytest> command, as long as the docker image has been correctly pulled and is running (view "To Build Image").
 
