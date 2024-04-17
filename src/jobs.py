@@ -50,8 +50,8 @@ def _instantiate_job(jid:str,status:str, functName:str, parameters:dict):
             'function_name': functName,
             'input_parameters': parameters,
             }
-'''
-def _save_job(jid:str,job_dict:dict):
+
+def _save_job(jid:str, job_dict:dict):
     """
     Function save a job object in the jobs database.
     Args:
@@ -60,10 +60,6 @@ def _save_job(jid:str,job_dict:dict):
     Return:
         None
     """
-    jdb.set(jid, json.dumps(job_dict))
-    return
-'''
-def _save_job(jid, job_dict):
     # Convert dict_keys to list
     job_dict = dict(job_dict)
     jdb.set(jid, json.dumps(job_dict))
@@ -93,6 +89,7 @@ def delete_jobs():
     keys = jdb.keys()  # Get all keys (job IDs) from the job database
     for key in keys:
         job_dict = json.loads(jdb.get(key))
+        logging.warning(f"{job_dict}")
         if job_dict['status'] == 'submitted':
             jdb.delete(key)  # Delete the job from the database
     return
@@ -114,7 +111,7 @@ def update_job_status(jid:str, status:str, output={}):
         new_job_dict = job_dict.copy()  # Create a copy of the job dictionary
         new_job_dict['status'] = status
         _save_job(jid, new_job_dict)  # Save the updated job dictionary
-        return job_dict
+        return new_job_dict
     else:
         logger.error("Job with ID %s not found when updating status", jid)
         return {"error": "incorrect function call"}

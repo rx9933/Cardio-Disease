@@ -33,22 +33,8 @@ def all_jobs():
     all_job_ids = get_all_job_ids()
     return all_job_ids
 
-"""
-def validate_year(data):
-   
-    if "start" not in data or "end" not in data:
-        return False
-    try:
-        start = int(data["start"])
-        end = int(data["end"])
-    except:
-        logger.warning(f"Correct input parameters not submitted by user for '{functName}'.")
-        return False
-    return True
-"""
 
-
-@app.route('/<functName>', methods=['POST'])
+@app.route('/jobs/<functName>', methods=['POST'])
 def submit_job(functName:str):
     """
     Function is used to submit jobs to the queue.
@@ -83,7 +69,7 @@ def submit_job(functName:str):
         job_dict = add_job(functName, data)
         return job_dict
 
-#@app.route('/jobs/<jid>', methods=['GET'])
+
 def get_job_by_id(jid:str):
     """
     Function return job dictionary (with status and, possibly, an output) given jid.
@@ -130,6 +116,15 @@ def get_job(jobid:str):
 
 
 def get_result_by_id(jid:str):
+    """
+    Function checks if result has been posted, this function is the main checker and is used by get_result.
+    Args:
+        jid (str): the job id
+    Returns:
+        the result ( a dictionary)
+        OR
+        error message (dictionary)
+    """     
     result = res_db.get(jid)
     if result is not None:
         return json.loads(result)
@@ -211,9 +206,6 @@ def edit_redis_data():
             all_data.extend(data)  # Append the data to the list
             offset += limit  # Increment the offset for the next request
 
-#        all_data_json = json.dumps(all_data)  # Serialize the list to a JSON string
-
-
         for row in all_data:
     # Adding the data to redis as a hash with teh key being teh row id
             row_id = str(row['row_id'])
@@ -264,7 +256,6 @@ def return_year_data():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
-
 
 
 
