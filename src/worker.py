@@ -161,6 +161,7 @@ def graph_rf(para:dict):
         plt.xlabel("Year")
         plt.ylabel(f"Prevalence amoung population (%)")
         plt.title(f"Age Standardized Rate of {disease.title()} and {risk_factor.title()} in {location} amoung {breakout} from {min(dis_data.keys())}-{max(dis_data.keys())}")
+        plt.legend()
     
     # saving image to results db
     plt.savefig('/output_image.png', bbox_inches='tight')
