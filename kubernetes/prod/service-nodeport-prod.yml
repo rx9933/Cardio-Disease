@@ -1,0 +1,12 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+    name: cardio-flask-nodeport-service
+spec:
+    type: NodePort
+    selector:
+        app: cardio-prod-api
+    ports:
+        - port: 5000
+          targetPort: 5000

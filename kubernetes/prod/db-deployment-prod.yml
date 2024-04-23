@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cardio-prod-db-deployment
+  labels:
+    app: cardio-prod-db
+    env: prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cardio-prod-db
+  template:
+    metadata:
+      labels:
+        app: cardio-prod-db
+        env: prod
+    spec:
+      containers:
+        - name: cardio-prod-db
+          image: redis:6.2.3
+          imagePullPolicy: Always
+          command: ["redis-server"]
+          volumeMounts:
+          - name: cardio-prod-db-pvc
+            mountPath: "/data"
+      volumes:
+      - name: cardio-prod-db-pvc
+        persistentVolumeClaim:
+          claimName: cardio-prod-db-pvc
