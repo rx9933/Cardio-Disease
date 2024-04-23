@@ -138,30 +138,30 @@ def graph_rf(para:dict):
         logger.warning(f"No parameter was provided for breakout category")
         breakout = 'Overall'
     # for each location and topic, find the XY data
-    cols = min(len(risk_factors), 3)
-    rows = ceil(len(risk_factors)/3)
-    figure, axis = plt.subplots(rows, cols)
+
     for risk_factor in risk_factors:
         # return {'disease' : select_series(location=location, topic=disease, breakout=breakout), 'rf': select_series(location=location, topic=risk_factor, breakout=breakout)}
         rf_data = select_series(location=location, topic=risk_factor, breakout=breakout)
-        dis_data = select_series(location=location, topic=disease, breakout=breakout)
         
         # sort the data by the keys
         rf_sorted = {}
         for i in sorted(rf_data.keys()):
             rf_sorted[i] = rf_data[i]
 
-        dis_sorted = {}
-        for i in sorted(dis_data.keys()):
-            dis_sorted[i] = dis_data[i]
-        
-        # plotting
-        plt.scatter(dis_sorted.keys(), dis_sorted.values(), color = "r", label = f"{disease}")
-        plt.scatter(rf_sorted.keys(), rf_sorted.values(), color = "b", label = f"{risk_factor}")
-        plt.xlabel("Year")
-        plt.ylabel(f"Age Standardized Rate (%)")
-        plt.title(f"Prevalence of {disease.title()} and {risk_factor.title()} in {location} Amoung the {breakout} Population from {min(dis_data.keys())}-{max(dis_data.keys())}", fontsize=10)
-        plt.legend()
+        plt.scatter(rf_sorted.keys(), rf_sorted.values(), label = f"{risk_factor}")
+    
+    # find XY data for disease
+    dis_data = select_series(location=location, topic=disease, breakout=breakout)
+    dis_sorted = {}
+    for i in sorted(dis_data.keys()):
+        dis_sorted[i] = dis_data[i]
+    plt.scatter(dis_sorted.keys(), dis_sorted.values(), label = f"{disease}")
+
+    # plot info
+    plt.xlabel("Year")
+    plt.ylabel(f"Age Standardized Rate (%)")
+    plt.title(f"Prevalence of {disease.title()} and {risk_factor.title()} in {location} Amoung the {breakout} Population from {min(dis_data.keys())}-{max(dis_data.keys())}", fontsize=10)
+    plt.legend()
     
     # saving image to results db
     plt.savefig('/output_image.png', bbox_inches='tight')
