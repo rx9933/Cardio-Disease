@@ -146,7 +146,7 @@ def graph_rf(para:dict):
         # sort the data by the keys
         rf_sorted = {}
         for i in sorted(rf_data.keys()):
-            rf_sorted[i] = rf_data[i]
+            rf_sorted[int(i)] = float(rf_data[i])
 
         plt.scatter(rf_sorted.keys(), rf_sorted.values(), label = f"{risk_factor}")
     
@@ -154,7 +154,7 @@ def graph_rf(para:dict):
     dis_data = select_series(location=location, topic=disease, breakout=breakout)
     dis_sorted = {}
     for i in sorted(dis_data.keys()):
-        dis_sorted[i] = dis_data[i]
+        dis_sorted[int(i)] = float(dis_data[i])
     plt.scatter(dis_sorted.keys(), dis_sorted.values(), label = f"{disease}")
 
     # plot info
