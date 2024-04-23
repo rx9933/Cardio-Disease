@@ -3,7 +3,7 @@ import requests
 import redis
 import json
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from jobs import add_job, get_job_by_id, get_all_job_ids, rd, delete_jobs, jdb
 from worker import res_db
 #from jobs import res_db
@@ -44,7 +44,7 @@ def submit_job(functName:str):
         job_dict: a dictionary of the job information (the input parameters, function name, current status (submitted), etc.)
     """
     logger.info(f"Received POST request for job '{functName}'.")
-    worker_functs = ["return_topics","test_work","max_affected"]
+    worker_functs = ["return_topics","test_work","max_affected", "graph_rf"]
     if not(functName in worker_functs):
          return jsonify({"error": "Invalid function name."}), 400
     should_continue = True
@@ -63,8 +63,36 @@ def submit_job(functName:str):
                 x = data[elem]
             except:
                 data[elem] = ""
-
-        # Add job to the queue
+    elif functName == "graph_rf":
+        paras = {'breakout', 'risk_factors', 'disease', 'location'}
+        keys_set = set(data.keys())
+        if keys_set > paras:
+            logger.warning("Invalid parameters")
+            return jsonify({"Error": f"Invalid parameters for graph_rf in {paras}"})
+        # Check if the sorted keys contains at least disease and risk factor
+        if ('risk_factors' not in keys_set) and ('disease' not in keys_set):
+            logger.warning("Must contain disease and risk_factor")
+            return jsonify({"Error": f"Parameters must contain 'disease' and 'risk_factor'"})
+        # test if brekaout is a valid breakout
+        if 'breakout' in keys_set:
+            breakout_list = ["Male","Other", "Female", "75+", "Non-Hispanic Asian", "Non-Hispanic White", "Overall", "Hispanic", "65+", "45-64", "20-24", "Non-Hispanic Black", "35+", "25-44", "18-24"]
+            if data['breakout'] not in breakout_list:
+                return jsonify({"Error": f"{data['breakout']} not a valid parameter for breakout. Valid parameters include {breakout_param}"})
+        if 'location' in keys_set:
+            location_param1 = all_categories('locationdesc')
+            location_param2 = all_categories('locationabbr')
+            if (data['location'] not in location_param1) and (data['location'] not in location_param2):
+                return jsonify({"Error": f"{data['location']} not a valid parameter for location. Valid parameters include {location_param1}"})
+        # test if rf is a valid rf and if disease is a valid disease
+        rf_list = ["Obesity", "Hypertension", "Physical Inactivity", "Cholesterol Abnormalities", "Smoking", "Diabetes", "Nutrition"]
+        dis_list = ["Stroke", "Acute Myocardial Infarction (Heart Attack)",  "Coronary Heart Disease", "Major Cardiovascular Disease"]
+        for rf in data['risk_factors']:
+            if rf not in rf_list:
+                return jsonify({"Error": f"{rf} not a valid parameter for risk factor. Valid parameters include {topic_param}"})
+        if data['disease'] not in dis_list:
+            return jsonify({"Error": f"{data['disease']} not a valid parameter for location. Valid parameters include {topic_param}"})
+    
+    # Add job to the queue
     if should_continue:
         job_dict = add_job(functName, data)
         return job_dict
@@ -124,10 +152,13 @@ def get_result_by_id(jid:str):
         the result ( a dictionary)
         OR
         error message (dictionary)
-    """     
+    """
     result = res_db.get(jid)
     if result is not None:
-        return json.loads(result)
+        if get_job(jid)['function_name'] == 'graph_rf':
+            return str(result)
+        else:
+            return json.loads(result)
     else:
         return {"error": "result not found"}
 
@@ -207,7 +238,7 @@ def edit_redis_data():
             offset += limit  # Increment the offset for the next request
 
         for row in all_data:
-    # Adding the data to redis as a hash with teh key being teh row id
+        # Adding the data to redis as a hash with teh key being teh row id
             row_id = str(row['row_id'])
             rd.set(row_id, json.dumps(row))
         return "Data posted successfully\n"
@@ -253,6 +284,32 @@ def return_year_data():
     logger.info("Returning year data")
     return jsonify(data_dict)
 
+@app.route('/data/<category>', methods=['GET'])
+def all_categories(category:str):
+    '''
+    Function returns all the available parameters for a given category
+    ArgsL
+        category (str): Name of category
+    Returns:
+        parameters_list (list): List of all available parameters
+    '''
+    parameters_list = []
+    for key in rd.keys():
+        data = json.loads(rd.get(key))
+        try:
+            param = data[category]
+        except KeyError:
+            return f"Error: {category} is not a valid category. Valid categories include {data.keys()}\n"
+        if param not in parameters_list:
+            parameters_list.append(param)
+    return parameters_list
+
+@app.route('/download/<jobid>', methods=['GET'])
+def download(jobid:str):
+    path = f'/app/{jobid}.png'
+    with open(path, 'wb') as f:
+        f.write(res_db.get(jobid))
+    return send_file(path, mimetype='image/png', as_attachment=True)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
