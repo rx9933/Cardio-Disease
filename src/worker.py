@@ -159,8 +159,8 @@ def graph_rf(para:dict):
         plt.scatter(dis_sorted.keys(), dis_sorted.values(), color = "r", label = f"{disease}")
         plt.scatter(rf_sorted.keys(), rf_sorted.values(), color = "b", label = f"{risk_factor}")
         plt.xlabel("Year")
-        plt.ylabel(f"Prevalence amoung population (%)")
-        plt.title(f"Age Standardized Rate of {disease.title()} and {risk_factor.title()} in {location} amoung {breakout} from {min(dis_data.keys())}-{max(dis_data.keys())}")
+        plt.ylabel(f"Age Standardized Rate (%)")
+        plt.title(f"Prevalence of {disease.title()} and {risk_factor.title()} in {location} Amoung the {breakout} Population from {min(dis_data.keys())}-{max(dis_data.keys())}", fontsize=10)
         plt.legend()
     
     # saving image to results db
