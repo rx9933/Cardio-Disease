@@ -156,9 +156,9 @@ def get_result_by_id(jid:str):
     result = res_db.get(jid)
     if result is not None:
         if get_job(jid)['function_name'] == 'graph_rf':
-            return str(result)
-        else:
-            return json.loads(result)
+            result = f"Image is available for download with the route /download/{jid}"
+            return result
+        return json.loads(result)
     else:
         return {"error": "result not found"}
 

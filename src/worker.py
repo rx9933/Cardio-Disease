@@ -173,7 +173,7 @@ def do_work(jobid:str):
     output = eval(functName)(input_para)
     # opening image and saving in redis
     if functName == 'graph_rf':
-        with open('/output_image.png', encoding='utf8', errors='ignore') as f:
+        with open('/output_image.png', 'rb') as f:
             img = f.read()
         res_db.set(jobid, img)
     else:
