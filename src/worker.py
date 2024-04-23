@@ -145,14 +145,25 @@ def graph_rf(para:dict):
         # return {'disease' : select_series(location=location, topic=disease, breakout=breakout), 'rf': select_series(location=location, topic=risk_factor, breakout=breakout)}
         rf_data = select_series(location=location, topic=risk_factor, breakout=breakout)
         dis_data = select_series(location=location, topic=disease, breakout=breakout)
-        plt.scatter(dis_data.keys(), dis_data.values(), color = "r", label = f"{disease}")
-        plt.scatter(rf_data.keys(), rf_data.values(), color = "b", label = f"{risk_factor}")
+        
+        # sort the data by the keys
+        rf_sorted = {}
+        for i in sorted(rf_data.keys()):
+            rf_sorted[i] = rf_data[i]
+
+        dis_sorted = {}
+        for i in sorted(dis_data.keys()):
+            dis_sorted[i] = dis_data[i]
+        
+        # plotting
+        plt.scatter(dis_sorted.keys(), dis_sorted.values(), color = "r", label = f"{disease}")
+        plt.scatter(rf_sorted.keys(), rf_sorted.values(), color = "b", label = f"{risk_factor}")
         plt.xlabel("Year")
         plt.ylabel(f"Prevalence amoung population (%)")
         plt.title(f"Age Standardized Rate of {disease.title()} and {risk_factor.title()} in {location} amoung {breakout} from {min(dis_data.keys())}-{max(dis_data.keys())}")
     
     # saving image to results db
-    plt.savefig('/output_image.png')
+    plt.savefig('/output_image.png', bbox_inches='tight')
     return
 
 @q.worker
