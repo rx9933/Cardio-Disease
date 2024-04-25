@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: app-prod-wrk
-          image: rx9933/cardio-disease:2.0
+          image: rx9933/cardio-disease:2.1
           imagePullPolicy: Always
           env:
           - name: REDIS_IP

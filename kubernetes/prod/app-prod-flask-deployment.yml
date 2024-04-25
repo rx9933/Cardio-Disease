@@ -21,7 +21,7 @@ spec:
             containers:
                 - name: app-prod-flask-deployment
                   imagePullPolicy: Always
-                  image: rx9933/cardio-disease:2.0
+                  image: rx9933/cardio-disease:2.1
                   command: ['python3', 'api.py']
                   ports:
                   - name: http
