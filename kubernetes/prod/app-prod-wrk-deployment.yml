@@ -21,6 +21,7 @@ spec:
         - name: app-prod-wrk
           image: rx9933/cardio-disease:2.1
           imagePullPolicy: Always
+          command: ['python3', 'worker.py']
           env:
-          - name: REDIS_IP
-            value: '10.233.37.73'
+            - name: REDIS_IP
+              value: '10.233.37.73'
