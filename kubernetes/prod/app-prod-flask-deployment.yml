@@ -28,4 +28,4 @@ spec:
                     containerPort: 5000
                   env:
                   - name: REDIS_IP
-                    value: '10.233.37.73'
+                    value: '10.233.33.203'
