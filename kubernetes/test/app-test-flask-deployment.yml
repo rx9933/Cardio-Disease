@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app-test-flask-deployment
+    labels:
+        env: test
+        app: app-test-flask
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: app-test-flask
+            env: test
+    template:
+        metadata:
+            labels:
+                app: app-test-flask
+                env: test
+        spec:
+            containers:
+                - name: app-test-flask-deployment
+                  imagePullPolicy: Always
+                  image: rx9933/cardio-disease:2.1
+                  command: ['python3', 'api.py']
+                  ports:
+                  - name: http
+                    containerPort: 5000
+                  env:
+                  - name: REDIS_IP
+                    value: '10.233.32.213'

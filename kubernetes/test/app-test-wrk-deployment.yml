@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-test-wrk-deployment
+  labels:
+    app: app-test-wrk
+    env: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-test-wrk
+  template:
+    metadata:
+      labels:
+        app: app-test-wrk
+        env: test
+    spec:
+      containers:
+        - name: app-test-wrk
+          image: rx9933/cardio-disease:2.1
+          imagePullPolicy: Always
+          command: ['python3', 'worker.py']
+          env:
+            - name: REDIS_IP
+              value: '10.233.32.213'
