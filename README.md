@@ -128,7 +128,8 @@ Follow these steps after "To Build Image". Execute the following commands after 
     ```bash
     sed -i 's/10.233.6.102/10.233.49.119/g' kubernetes/prod/*.yml
   ```
-  Make sure to replace 10.233.6.102 with the correct current value and 10.233.49.119 with the correct redis service IP. 
+  Make sure to replace 10.233.6.102 with the correct current value and 10.233.49.119 with the correct redis service IP.
+  
 3. Finally, apply the remaining kubernetes files to launch the flask, worker, nodeport, and ingress services. 
     ```bash
     kubectl apply -f app-prod-flask-deployment.yml
