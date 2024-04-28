@@ -1,6 +1,6 @@
 <h1 align="center">Homework 08: Cardiovascular Disease</h1>
 <p align="center">
-  <b>A containerized Flask-Redis application that analyzes behavioral risk factors on cardiovascular disease. Start of Final Project for COE332 (Software Engineering and Design).</b></br>
+  <b>A containerized Flask-Redis-Kubernetes application that analyzes behavioral risk factors on cardiovascular disease. Start of Final Project for COE332 (Software Engineering and Design).</b></br>
   <sub><sub>
 </p>
 
@@ -41,7 +41,7 @@ The following files are included for correct deployment of this app:
 # Diagram
 A software diagram is presented below. 
 
-![plot](Final Project_COE332.png)
+![plot](diagram.png)
 
 This image shows the various files and how the interact with the user (via flask commands) and with each other.
 
