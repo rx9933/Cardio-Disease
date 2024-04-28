@@ -1,6 +1,6 @@
-<h1 align="center">Homework 08: Cardiovascular Disease</h1>
+<h1 align="center"> Cardiovascular Disease Across the United States</h1>
 <p align="center">
-  <b>A containerized Flask-Redis-Kubernetes application that analyzes behavioral risk factors on cardiovascular disease. Start of Final Project for COE332 (Software Engineering and Design).</b></br>
+  <b>A containerized Flask-Redis-Kubernetes application that analyzes behavioral risk factors on cardiovascular disease across the US states. Final Project for COE332 (Software Engineering and Design).</b></br>
   <sub><sub>
 </p>
 
@@ -8,15 +8,13 @@
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#purpose)
 #  Purpose
-The project aims to illuminate various correlations between behavioral patterns and cardiovascular diseases. The app will include:
+The project aims to illuminate various correlations between behavioral patterns and cardiovascular diseases. The app includes:
 1. several endpoints for retrieving specific data subsets, such as by class (cardiovascular rates or risk factors), topic (specific cardiovascular diseases or risk factors), location (states), and breakout category (gender, age, or race)
 2. functionality to post, delete, and retrieve data from a Redis database
 3. various data analysis (calculating most affected populations to specific diseases). 
-4. visualizations in graphs.
-The app's easy functionality for data visualization will allow for widespread access to data patterns and future insights into how lifestyle choices and demographic factors can contribute to cardiovascular health.
+4. visualizations in graphs (of correlations between behavioral patterns like smoking and different cardiovascular diseases like stroke).
+The app's easy functionality for data visualization should allow for widespread access to data patterns and future insights into how lifestyle choices and demographic factors can contribute to cardiovascular health.
 Ultimately, the app can help inform public health strategies and interventions.
-
-Step 1 is currently being developed/improved while step 4 will be implemented in the future. 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#data)
 #  Data
@@ -35,8 +33,20 @@ The following files are included for correct deployment of this app:
 8. "Dockerfile": contains instructions for docker to work (building/running program with the requirements, api, jobs, and worker files).
 9. "docker-compose.yml":  containerized docker commands (for automation purposes).
 10. "data/": an empty data folder (includes a .gitcanary file to post the relatively empty data/ folder to GitHub). Redis database writes a dump.rdb file to this folder. Empty data/ folder is created for correct write permissions. 
-11. "README.md": this file, describes the functionality of the cardiovascular disease app.
-12. 
+11. "diagram.png": software diagram of this application.
+12. "README.md": this file, describes the functionality of the cardiovascular disease app.
+
+The program has 16 files to set up kubernetes: 8 files to set up the production environment and 8 files to test the environment. The 8 files in the production are:
+1. "app-prod-deployment-flask.yaml": Deployment configuration for the Flask application in the production environment. Manages the deployment of pods running the Flask app.
+2. "app-prod-deployment-redis.yaml": Deployment configuration for the Redis service in the production environment. Manages the deployment of pods running Redis.
+3. "app-prod-deployment-worker.yaml": Deployment configuration for the worker component in the production environment. Manages the deployment of pods running the worker.
+4. "app-prod-ingress-flask.yaml": Ingress configuration for routing external traffic to the Flask application in the production environment. Manages the routing of HTTP and HTTPS traffic.
+5. "app-prod-pvc-redis.yaml": PersistentVolumeClaim (PVC) configuration for the Redis service in the production environment. Manages the storage resources for Redis.
+6. "app-prod-service-flask.yaml": Service configuration for the Flask application in the production environment. Provides a stable endpoint for accessing the Flask app.
+7. "app-prod-service-nodeport-flask.yaml": NodePort Service configuration for the Flask application in the production environment. Exposes the Flask app on a specific port on all nodes in the cluster.
+8. "app-prod-service-redis.yaml": Service configuration for the Redis service in the production environment. Provides a stable endpoint for accessing Redis.
+8 more files are nearly identical to the production files listed above; each of them began with “app-test” instead of “app-prod” and set up a test environment instead of the production environment. 
+
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#diagram)
 # Diagram
 A software diagram is presented below. 
@@ -65,6 +75,10 @@ Leave the program running while proceeding with Making Requests to Container. On
 ```bash
 docker-compose down
 ```
+
+## To Launch Kubernetes
+The following instructions are to launch the a production environment, not the test environment.
+
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#routes)
 # Routes
