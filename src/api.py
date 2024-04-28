@@ -19,6 +19,68 @@ log_level = os.environ.get('LOG_LEVEL', 'INFO')
 logging.basicConfig(level=log_level)
 logger = logging.getLogger(__name__)
 
+@app.route('/', methods=['GET'])
+def help()->str:
+    """
+    Helper function to return possible functions/jobs in this app.
+    Args:
+        None
+    Returns:
+        route_info: a string of different functions/jobs.
+    """
+    route_info = """
+- Route: `/`
+\t- Purpose: Help route. Returns all the possible functions/commands users can use (this image).
+\t- Example:
+\t\t- Internet: `cardio-app.coe332.tacc.cloud/`
+\t\t- Local laptop: `curl cardio-app.coe332.tacc.cloud/`
+
+- Route: `/data`
+\t- Purpose: GET, POST, or DELETE data from Redis. Replace command (`-X GET`) with appropriate/desired flag (`-X POST` to post data to Redis).
+\t- Example:
+\t\t- Internet: `cardio-app.coe332.tacc.cloud/data`
+\t\t- Local laptop: `curl cardio-app.coe332.tacc.cloud/data`
+
+- Route: `/year_data?start=int&end=int`
+\t- Purpose: Returns data from Redis within the user-specified range (start is the earliest data to be returned while end is the last year of data that is returned. Note that start and end are optional parameters. Also note the quotes (required when users input more than one query argument).
+\t- Example:
+\t\t- Internet: `cardio-app.coe332.tacc.cloud/year_data?start=2018&end=2020`
+\t\t- Local laptop: `curl “cardio-app.coe332.tacc.cloud/year_data?start=2018&end=2020”`
+
+- Route: `/jobs`
+\t- Purpose: GET route returns all jobs that have been completed, in-progress, or have been submitted; returns a list of job ids(unique identifiers for each job).
+\t- Example:
+\t\t- Local laptop: `curl cardio-app.coe332.tacc.cloud/jobs -X GET`
+
+- Route: `/jobs/return_topics`
+\t- Purpose: POST route posts a job to the queue. There are 3 different jobs: return_topics, max_affected, and XXX.
+\t- Example:
+\t\t- Local laptop: `curl cardio-app.coe332.tacc.cloud/jobs/return_topics -X POST -d '{}' -H "Content-Type: application/json"`
+
+- Route: `/jobs/max_affected`
+\t- Purpose: POST route posts a job to the queue. There are 3 different jobs: return_topics, max_affected, and XXX.
+\t- Example:
+\t\t- Local laptop: `curl cardio-app.coe332.tacc.cloud/jobs/max_affected -X POST -d '{"year":"2014","topic":"Coronary Heart Disease","break_out":"65+"}' -H "Content-Type: application/json"`
+
+- Route: `/jobs/delete`
+\t- Purpose: DELETE route deletes all jobs that have been submitted (but are not in progress or completed).
+\t- Example:
+\t\t- Local laptop: `curl cardio-app.coe332.tacc.cloud/jobs/delete -X DELETE`
+
+- Route: `/jobs/<jobid>`
+\t- Purpose: GET route returns the input parameters, job type, and status of the job. jobid is a string (unique identifier for a specific job).
+\t- Example:
+\t\t- Internet: `cardio-app.coe332.tacc.cloud/jobs/<"specific_job_id">`
+\t\t- Local laptop: `curl cardio-app.coe332.tacc.cloud/jobs/<"specific_job_id"> -X GET`
+
+- Route: `/results/<jobid>`
+\t- Purpose: GET route returns the results of a specific job. jobid is a string (unique identifier for a specific job).
+\t- Example:
+\t\t- Internet: `cardio-app.coe332.tacc.cloud/results/<"specific_job_id">`
+\t\t- Local laptop: `curl cardio-app.coe332.tacc.cloud/results/<"specific_job_id"> -X GET`
+"""
+    return route_info
+
 
 @app.route('/jobs', methods=['GET'])
 def all_jobs():
