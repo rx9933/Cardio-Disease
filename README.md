@@ -41,7 +41,7 @@ The following files are included for correct deployment of this app:
 # Diagram
 A software diagram is presented below. 
 
-![plot](HW8.png)
+![plot](Final Project_ COE332.png)
 
 This image shows the various files and how the interact with the user (via flask commands) and with each other.
 
