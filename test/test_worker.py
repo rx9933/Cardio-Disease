@@ -64,6 +64,39 @@ def test_max_affected() -> None:
     assert response.json()["topic"] == "Stroke"
     assert response.json()["break_out"] == "65+"
 
+
+
+    # Test when no data is found satisfying the specified inputs
+    para = {"topic": "Nonexistent Disease", "year": "2020", "break_out": ""}
+    assert max_affected(para) == "No data of this type can be found to analyze.\n"
+
+
+    # Test when data is found satisfying the specified inputs
+    para = {"topic": "Coronary Heart Disease", "year": "2014", "break_out": "65+"}
+    expected_result = {
+        "topic": "Coronary Heart Disease",
+        "year": "2014",
+        "break_out": "65+",
+        "data_value": "22.3"
+    }
+    assert max_affected(para) == expected_result
+
+
+    # Test when data is found satisfying the specified inputs but missing "data_value" key
+    para = {"topic": "Coronary Heart Disease", "year": "2015", "break_out": ""}
+    assert max_affected(para) == "No data of this type can be found to analyze.\n"
+
+
+    # Test when data is found satisfying the specified inputs but with invalid "data_value" (not a float)
+    para = {"topic": "Coronary Heart Disease", "year": "2016", "break_out": "18-24"}
+    assert max_affected(para) == "No data of this type can be found to analyze.\n"
+
+
+    # Test when input parameters are invalid (e.g., missing "topic" key)
+    para = {"year": "2017", "break_out": "25-34"}
+    assert max_affected(para) == "No data of this type can be found to analyze.\n"
+
+
 def test_test_work() -> None:
     """
     Test the 'test_work' job submission and result retrieval.

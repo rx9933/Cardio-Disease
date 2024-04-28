@@ -11,6 +11,20 @@ log_level = os.environ.get('LOG_LEVEL', 'INFO')
 logging.basicConfig(level=log_level)
 logger = logging.getLogger(__name__)
 
+def test_help() -> None:
+    """
+    Tests the / route for the help method.
+    
+    Returns:
+        None
+    
+    Args:
+        None
+    """
+    response = requests.get("http://localhost:5000/")
+    assert response.status_code == 200
+    assert isinstance(response.json(), str)
+        
 def test_all_jobs() -> None:
     """
     Test the /jobs route for GET method.
