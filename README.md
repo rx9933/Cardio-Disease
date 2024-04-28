@@ -83,20 +83,20 @@ Follow these steps after "To Build Image". Execute the following commands after 
 1.  Create a persistent volume claim (PVC) for redis, a redis deployment that binds to the PVC, and a redis service.
     Use the following command: 
     ```bash
-    kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
+       kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
     ```
     This should output:
     ```bash
-      ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
-      persistentvolumeclaim/app-prod-redis created
-      deployment.apps/app-prod-redis-deployment created
-      service/app-prod-redis-service created
+       ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
+       persistentvolumeclaim/app-prod-redis created
+       deployment.apps/app-prod-redis-deployment created
+       service/app-prod-redis-service created
     ```
    
    To ensure the Redis deployment is correctly running and the PVC is properly bound.
    Use the following command:
    ```bash
-     kubectl get deployment && kubectl get pvc && kubectl get services
+      kubectl get deployment && kubectl get pvc && kubectl get services
    ```
    This should output:
    ```bash
@@ -120,36 +120,36 @@ Follow these steps after "To Build Image". Execute the following commands after 
   In this case, the IP address is 10.233.49.119.
   To get the current values written in the flask and worker deployments, use:
   ```bash
-    ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease$ grep -r 10 kubernetes/prod/
-    kubernetes/prod/app-prod-flask-deployment.yml:                    value: '10.233.6.102'
-    kubernetes/prod/app-prod-wrk-deployment.yml:              value: '10.233.6.102'
+     ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease$ grep -r 10 kubernetes/prod/
+     kubernetes/prod/app-prod-flask-deployment.yml:                    value: '10.233.6.102'
+     kubernetes/prod/app-prod-wrk-deployment.yml:              value: '10.233.6.102'
     ```
     To replace all isntances of 10.233.6.102 with 10.233.49.119, use the following command:
     ```bash
-    sed -i 's/10.233.6.102/10.233.49.119/g' kubernetes/prod/*.yml
+       sed -i 's/10.233.6.102/10.233.49.119/g' kubernetes/prod/*.yml
   ```
   Make sure to replace 10.233.6.102 with the correct current value and 10.233.49.119 with the correct redis service IP.
   
 3. Finally, apply the remaining kubernetes files to launch the flask, worker, nodeport, and ingress services. 
     ```bash
-    kubectl apply -f app-prod-flask-deployment.yml
-    kubectl apply -f app-prod-flask-service.yml
-    kubectl apply -f app-prod-wrk-deployment.yml
-    kubectl apply -f app-prod-nodeport-service.yml
-    kubectl apply -f app-prod-ingress.yml
+       kubectl apply -f app-prod-flask-deployment.yml
+       kubectl apply -f app-prod-flask-service.yml
+       kubectl apply -f app-prod-wrk-deployment.yml
+       kubectl apply -f app-prod-nodeport-service.yml
+       kubectl apply -f app-prod-ingress.yml
     ```
     This should output:
     ```bash
-    ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-flask-deployment.yml
-    kubectl apply -f app-prod-flask-service.yml
-    kubectl apply -f app-prod-wrk-deployment.yml
-    kubectl apply -f app-prod-nodeport-service.yml
-    kubectl apply -f app-prod-ingress.yml
-    deployment.apps/app-prod-flask-deployment created
-    service/app-prod-flask-service created
-    deployment.apps/app-prod-wrk-deployment created
-    service/nodeport-service created
-    ingress.networking.k8s.io/app-ingress created
+       ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-flask-deployment.yml
+       kubectl apply -f app-prod-flask-service.yml
+       kubectl apply -f app-prod-wrk-deployment.yml
+       kubectl apply -f app-prod-nodeport-service.yml
+       kubectl apply -f app-prod-ingress.yml
+       deployment.apps/app-prod-flask-deployment created
+       service/app-prod-flask-service created
+       deployment.apps/app-prod-wrk-deployment created
+       service/nodeport-service created
+       ingress.networking.k8s.io/app-ingress created
     ```
       
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#routes)
