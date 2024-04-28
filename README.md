@@ -87,10 +87,10 @@ Follow these steps after "To Build Image". Execute the following commands after 
     ```
     This should output:
     ```bash
-    ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
-    persistentvolumeclaim/app-prod-redis created
-    deployment.apps/app-prod-redis-deployment created
-    service/app-prod-redis-service created
+      ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
+      persistentvolumeclaim/app-prod-redis created
+      deployment.apps/app-prod-redis-deployment created
+      service/app-prod-redis-service created
     ```
    
    To ensure the Redis deployment is correctly running and the PVC is properly bound.
@@ -100,22 +100,22 @@ Follow these steps after "To Build Image". Execute the following commands after 
    ```
    This should output:
    ```bash
-    ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl get deployment && kubectl get pvc && kubectl get services
-    NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
-    app-prod-redis-deployment    1/1     1            1           5m6s
-    cardio-prod-api-deployment   0/1     1            0           3d20h
-    py-debug                     1/1     1            1           24h
-    NAME             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-    app-prod-redis   Bound    pvc-ba9e8150-8c9e-44d2-9d97-e1cadaa30427   1Gi        RWO            cinder-csi     5m6s
-    NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-    app-prod-redis-service   ClusterIP   10.233.6.102   <none>        6379/TCP   5m5s
+      ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl get deployment && kubectl get pvc && kubectl get services
+      NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+      app-prod-redis-deployment    1/1     1            1           5m6s
+      cardio-prod-api-deployment   0/1     1            0           3d20h
+      py-debug                     1/1     1            1           24h
+      NAME             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+      app-prod-redis   Bound    pvc-ba9e8150-8c9e-44d2-9d97-e1cadaa30427   1Gi        RWO            cinder-csi     5m6s
+      NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+      app-prod-redis-service   ClusterIP   10.233.6.102   <none>        6379/TCP   5m5s
    ```
 2. Replace the Redis service cluster IP with the appropriate IP address in the flask-deployment and wrk-deployment yaml files.
    To find the Redis service IP address, use the following command:
    ```bash
-    ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl get services
-    NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
-    app-prod-redis-service   ClusterIP   10.233.49.119   <none>        6379/TCP   24s
+      ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl get services
+      NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+      app-prod-redis-service   ClusterIP   10.233.49.119   <none>        6379/TCP   24s
   ```
   In this case, the IP address is 10.233.49.119.
   To get the current values written in the flask and worker deployments, use:
