@@ -78,8 +78,79 @@ docker-compose down
 
 ## To Launch Kubernetes
 The following instructions are to launch the a production environment, not the test environment.
+Follow these steps after "To Build Image". Execute the following commands after navigating to the kubernetes/prod directory. 
 
-
+1.  Create a persistent volume claim (PVC) for redis, a redis deployment that binds to the PVC, and a redis service.
+    Use the following command: 
+    ```bash
+    kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
+    ```
+    This should output:
+    ```bash
+    ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
+    persistentvolumeclaim/app-prod-redis created
+    deployment.apps/app-prod-redis-deployment created
+    service/app-prod-redis-service created
+    ```
+   
+   To ensure the Redis deployment is correctly running and the PVC is properly bound.
+   Use the following command:
+   ```bash
+     kubectl get deployment && kubectl get pvc && kubectl get services
+   ```
+   This should output:
+   ```bash
+    ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl get deployment && kubectl get pvc && kubectl get services
+    NAME                         READY   UP-TO-DATE   AVAILABLE   AGE
+    app-prod-redis-deployment    1/1     1            1           5m6s
+    cardio-prod-api-deployment   0/1     1            0           3d20h
+    py-debug                     1/1     1            1           24h
+    NAME             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+    app-prod-redis   Bound    pvc-ba9e8150-8c9e-44d2-9d97-e1cadaa30427   1Gi        RWO            cinder-csi     5m6s
+    NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+    app-prod-redis-service   ClusterIP   10.233.6.102   <none>        6379/TCP   5m5s
+   ```
+2. Replace the Redis service cluster IP with the appropriate IP address in the flask-deployment and wrk-deployment yaml files.
+   To find the Redis service IP address, use the following command:
+   ```bash
+    ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl get services
+  NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+    app-prod-redis-service   ClusterIP   10.233.49.119   <none>        6379/TCP   24s
+  ```
+  In this case, the IP address is 10.233.49.119.
+  To get the current values written in the flask and worker deployments, use:
+  ```bash
+  ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease$ grep -r 10 kubernetes/prod/
+  kubernetes/prod/app-prod-flask-deployment.yml:                    value: '10.233.6.102'
+  kubernetes/prod/app-prod-wrk-deployment.yml:              value: '10.233.6.102'
+  ```
+  To replace all isntances of 10.233.6.102 with 10.233.49.119, use the following command:
+  ```bash
+  sed -i 's/10.233.6.102/10.233.49.119/g' kubernetes/prod/*.yml
+  ```
+  Make sure to replace 10.233.6.102 with the correct current value and 10.233.49.119 with the correct redis service IP. 
+3. Finally, apply the remaining kubernetes files to launch the flask, worker, nodeport, and ingress services. 
+    ```bash
+    kubectl apply -f app-prod-flask-deployment.yml
+    kubectl apply -f app-prod-flask-service.yml
+    kubectl apply -f app-prod-wrk-deployment.yml
+    kubectl apply -f app-prod-nodeport-service.yml
+    kubectl apply -f app-prod-ingress.yml
+    ```
+    This should output:
+    ```bash
+    ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-flask-deployment.yml
+    kubectl apply -f app-prod-flask-service.yml
+    kubectl apply -f app-prod-wrk-deployment.yml
+    kubectl apply -f app-prod-nodeport-service.yml
+    kubectl apply -f app-prod-ingress.yml
+    deployment.apps/app-prod-flask-deployment created
+    service/app-prod-flask-service created
+    deployment.apps/app-prod-wrk-deployment created
+    service/nodeport-service created
+    ingress.networking.k8s.io/app-ingress created
+    ```
+      
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#routes)
 # Routes
 Note: Proceed only if "To Build Image" is complete and the app is running (step 3). 
