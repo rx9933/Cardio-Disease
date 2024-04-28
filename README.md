@@ -151,7 +151,7 @@ Follow these steps after "To Build Image". Execute the following commands after 
        service/nodeport-service created
        ingress.networking.k8s.io/app-ingress created
     ```
-      
+
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#routes)
 # Routes
 Note: Proceed only if "To Build Image" is complete and the app is running (step 3). 
@@ -411,6 +411,26 @@ There are currently 3 job functions that can be run. Note that these are in addi
       Result not found for the specified Job ID. Check completion status of job.
    ```
    
+# Using Kubernetes
+If Kubernetes is launched correctly, all commands as described in Routes and Jobs can be written from the a local terminal (which does not have docker or kubernetes installed). Additionally, all get requests can be launched from the internet. Post or delete requests can also be launched from the internet if an API like Postman is used.
+Note that any commands written through localhost are not recorded on the kubernetes cluster; all commands written from the local terminal or on the internet will be recorded on the kubernetes cluster. 
+
+An ingress opens the kubernetes node for access, and an ingress allows for access from a local terminal/internet. 
+The name of the ingress can be found by using:
+```bash
+  ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl get ingress
+  NAME          CLASS   HOSTS                          ADDRESS                                                    PORTS   AGE
+  app-ingress   nginx   cardio-app.coe332.tacc.cloud   129.114.36.240,129.114.36.49,129.114.36.83,129.114.38.92   80
+```
+By replacing "localhost:5000" with the ingress host name, cardio-app.coe332.tacc.cloud, all the routes and jobs (as described above) can be accessed from a local terminal.
+For example, to return a list of all the jobs, use:
+```bash
+curl cardio-app.coe332.tacc.cloud/jobs
+```
+On the internet, simply use the ingress host name (followed by, optionally, the specific route). To return a list all jobs, use:
+```bash
+cardio-app.coe332.tacc.cloud/jobs
+```
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#unittesting)
 # Unit Testing
@@ -471,8 +491,8 @@ Try to check the status of the job with "curl localhost:5000/jobs/<"specific_job
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#contributions)
 #  Contributions
-* Arushi Sadam on app development and writing the Readme.
-* Professor Joe Allen: on providing help for all my questions (regarding using environment variables, docker-compose, redis, etc.).
+* Arushi Sadam and Alana Gaughan on app development and writing the Readme.
+* Professor Joe Allen: on providing help for all questions (regarding using environment variables, docker-compose, redis, etc.).
 * [COE 332: Software and Engineering Design Read The Docs](https://coe-332-sp24.readthedocs.io/en/latest/unit05/containers_2.html): on usage (running the program with Linux commands)
 * [CDC: National Cardiovascular Disease Surveillance Data)](https://data.cdc.gov/Heart-Disease-Stroke-Prevention/Behavioral-Risk-Factor-Surveillance-System-BRFSS-N/ikwk-8git/about_data): on providing data.
 * ChatGPT: on writing this README.md.
