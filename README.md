@@ -156,6 +156,13 @@ Follow these steps after "To Build Image". Execute the following commands after 
 # Routes
 Note: Proceed only if "To Build Image" is complete and the app is running (step 3). 
 The following are various curl commands/routes that can be utilized: 
+0. Help Function
+  * To get information about different jobs or functions supported by the application:
+    ```bash
+    curl localhost:5000/
+    ```
+    This will return a large string with different routes and their purposes.
+    
 1. Redis Functionality
     * To add data to Redis:
     ```bash
@@ -198,9 +205,15 @@ The following are various curl commands/routes that can be utilized:
    ```
    This result might show up if data has not been posted to (or has been deleted from) redis as well. View below note.
    
+   * To return explore the different parameters of a given category:
+    ```bash
+      curl localhost:5000/data/<category>
+    ```
+  #ADD INFO HERE#
+
     *Note*: Data on Redis is required for any data analysis; that is how the worker.py gets the data as input. As such, data deletion is not advised to be performed before adding/curling job requests. Doing so will result in empty/uninteresting results as output. 
    
-1. Job Functionality
+3. Job Functionality
     * To add a job:
     ```bash
       curl localhost:5000/jobs/<functionName> -X POST -d '{"parameter key 1": "input data 1", "parameter key 2": "input data 2"}' -H "Content-Type: application/json"
