@@ -8,6 +8,7 @@ import os
 import redis
 from math import ceil
 import matplotlib.pyplot as plt
+from textwrap import wrap
 
 _redis_ip = os.environ.get('REDIS_IP','environment not found')
 _redis_port = '6379'
@@ -89,7 +90,7 @@ def select_series(location:str, breakout:str, topic:str):
     # What does return dict look like {X: Y}
     # loop through redis db, look for rd[key][location]
     # checks if the data value is between
-    logger.info(f"Select series function started")
+    logger.info(f"Select series function started for {topic}")
     return_dict = {}
     for key in rd.keys():
         data = json.loads(rd.get(key))
@@ -98,8 +99,7 @@ def select_series(location:str, breakout:str, topic:str):
         if location == data['locationabbr'] or location == data['locationdesc']:
             indicator = data['indicator']
             indicator_trimmed = indicator.replace('Prevalence of ', '')
-            indicator_trimmed = indicator_trimmed.split(' among')[0]
-            logger.error(f"indicator_trimmed = {indicator_trimmed}, topic = {topic}") 
+            indicator_trimmed = indicator_trimmed.split(' among')[0] 
             if topic.lower() == indicator_trimmed and breakout == data['break_out']:
                 # checks if data value is statistically relevant
                 # if not, log warning with data value notes
@@ -114,8 +114,8 @@ def select_series(location:str, breakout:str, topic:str):
                 continue
         else:
             continue
-    logger.info(f"Select series function ended")
-    return return_dict, indicator
+    logger.info(f"Select series function ended, indicator = {indicator}")
+    return return_dict
 
 def graph_rf(para:dict):
     '''
@@ -140,34 +140,30 @@ def graph_rf(para:dict):
     else:
         logger.warning(f"No parameter was provided for breakout category")
         breakout = 'Overall'
-    # for each location and topic, find the XY data
-
+    
+    graph_labels = []
+    risk_factors.append(disease)
+    # loop through all risk factors and diseases to graph
     for risk_factor in risk_factors:
-        # return {'disease' : select_series(location=location, topic=disease, breakout=breakout), 'rf': select_series(location=location, topic=risk_factor, breakout=breakout)}
-        rf_data, indicator = select_series(location=location, topic=risk_factor, breakout=breakout)
-        
+        rf_data = select_series(location=location, topic=risk_factor, breakout=breakout)
         # sort the data by the keys
         rf_sorted = {}
         for i in sorted(rf_data.keys()):
             rf_sorted[int(i)] = float(rf_data[i])
-
-        plt.scatter(rf_sorted.keys(), rf_sorted.values(), label = f"{indicator}")
-    
-    # find XY data for disease
-    dis_data, indicator = select_series(location=location, topic=disease, breakout=breakout)
-    dis_sorted = {}
-    for i in sorted(dis_data.keys()):
-        dis_sorted[int(i)] = float(dis_data[i])
-    plt.scatter(dis_sorted.keys(), dis_sorted.values(), label = f"{indicator}")
+        plt.plot(rf_sorted.keys(), rf_sorted.values())
+        graph_labels.append(f"Prevalence of {risk_factor.lower()} among US adults")
+        logger.info(f"Plotted {rf_sorted.keys()} vs {rf_sorted.values()}")
 
     # plot info
     plt.xlabel("Year")
     plt.ylabel(f"Age Standardized Rate (%)")
-    plt.title(f"Prevalence of {disease.title()} and {risk_factor.title()} in {location} Amoung the {breakout} Population from {min(dis_data.keys())}-{max(dis_data.keys())}", fontsize=10)
-    plt.legend()
+    plt.title(f"Prevalence of {disease.title()} and Associated Risk Factors Amoung the {breakout} Population in {location.title()}", fontsize=10)
+    logger.debug(f"graph labels = {graph_labels}")
+    graph_labels = ['\n'.join(wrap(i, 20)) for i in graph_labels]
+    plt.legend(graph_labels, loc='center left', bbox_to_anchor=(1, 0.5))
     
     # saving image to results db
-    plt.savefig('/output_image.png', bbox_inches='tight')
+    plt.savefig('/output_image.png', bbox_inches='tight', fontsize=7)
     return
 
 @q.worker
