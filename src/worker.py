@@ -47,25 +47,21 @@ def max_affected(para: dict):
     Function returns the datum with the most percentage affected by the specified cardiovascular disease. 
     Args:
         para: input parameters dictionary. This can optionally contain the break_out type (an age category like 65+ or a gender like Male or a race like Hispanic), a location (like Arizona), and a specific cardiovascular disease (Stroke).
-    Returns:
-        the data dictionary with the maximum population percentage affected by the specified disease (if input) or a string that no data is found satisfying the specified inputs.
+    Returns: the data dictionary with the maximum population percentage affected by the specified disease (if input) or a string that no data is found satisfying the specified inputs.
     """
     keys_input = ["topic", "year", "break_out"]
     keys_to_keep = [key for key in keys_input if para[key] != ""]
-
     maxpercent = None
     for key in rd.keys():
         data = json.loads(rd.get(key))
         if data["category"] == 'Cardiovascular Diseases':
             correct_type = all(data[spec] == para[spec] for spec in keys_to_keep)
-
             if correct_type and "data_value" in data:
                 if maxpercent is None or float(data["data_value"]) > float(maxpercent["data_value"]):
                     maxpercent = data
     if maxpercent is None:
         return "No data of this type can be found to analyze.\n"
     return maxpercent
-
 
 def test_work(para:dict):
     '''
@@ -88,17 +84,23 @@ def select_series(location:str, breakout:str, topic:str):
         para: input parameters. For this function parameters include breakout (str) (optional, default to overall), topic (str), lcoation (list)
     Returns:
         return_dict: The XY data for the graphs, X is the year, Y is the data value
+        indicator (str): The question associated with the data
     '''
     # What does return dict look like {X: Y}
     # loop through redis db, look for rd[key][location]
     # checks if the data value is between
+    logger.info(f"Select series function started")
     return_dict = {}
     for key in rd.keys():
         data = json.loads(rd.get(key))
         if data['data_value_typeid'] == 'Crude' and data['break_out_category'] != 'Age':
             continue
         if location == data['locationabbr'] or location == data['locationdesc']:
-            if topic == data['topic'] and breakout == data['break_out']:
+            indicator = data['indicator']
+            indicator_trimmed = indicator.replace('Prevalence of ', '')
+            indicator_trimmed = indicator_trimmed.split(' among')[0]
+            logger.error(f"indicator_trimmed = {indicator_trimmed}, topic = {topic}") 
+            if topic.lower() == indicator_trimmed and breakout == data['break_out']:
                 # checks if data value is statistically relevant
                 # if not, log warning with data value notes
                 year = data['year']
@@ -112,7 +114,8 @@ def select_series(location:str, breakout:str, topic:str):
                 continue
         else:
             continue
-    return return_dict
+    logger.info(f"Select series function ended")
+    return return_dict, indicator
 
 def graph_rf(para:dict):
     '''
@@ -130,7 +133,7 @@ def graph_rf(para:dict):
         location = para['location']
     else:
         logger.warning(f"No paramerter was provided for location. Default to USM")
-        location = 'USM'
+        location = 'Median of all states'
     #set the breakout to Overall if it does not exist
     if 'breakout' in para.keys():
         breakout = para['breakout']
@@ -141,21 +144,21 @@ def graph_rf(para:dict):
 
     for risk_factor in risk_factors:
         # return {'disease' : select_series(location=location, topic=disease, breakout=breakout), 'rf': select_series(location=location, topic=risk_factor, breakout=breakout)}
-        rf_data = select_series(location=location, topic=risk_factor, breakout=breakout)
+        rf_data, indicator = select_series(location=location, topic=risk_factor, breakout=breakout)
         
         # sort the data by the keys
         rf_sorted = {}
         for i in sorted(rf_data.keys()):
             rf_sorted[int(i)] = float(rf_data[i])
 
-        plt.scatter(rf_sorted.keys(), rf_sorted.values(), label = f"{risk_factor}")
+        plt.scatter(rf_sorted.keys(), rf_sorted.values(), label = f"{indicator}")
     
     # find XY data for disease
-    dis_data = select_series(location=location, topic=disease, breakout=breakout)
+    dis_data, indicator = select_series(location=location, topic=disease, breakout=breakout)
     dis_sorted = {}
     for i in sorted(dis_data.keys()):
         dis_sorted[int(i)] = float(dis_data[i])
-    plt.scatter(dis_sorted.keys(), dis_sorted.values(), label = f"{disease}")
+    plt.scatter(dis_sorted.keys(), dis_sorted.values(), label = f"{indicator}")
 
     # plot info
     plt.xlabel("Year")

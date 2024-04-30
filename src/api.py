@@ -146,13 +146,14 @@ def submit_job(functName:str):
             if (data['location'] not in location_param1) and (data['location'] not in location_param2):
                 return jsonify({"Error": f"{data['location']} not a valid parameter for location. Valid parameters include {location_param1}"})
         # test if rf is a valid rf and if disease is a valid disease
-        rf_list = ["Obesity", "Hypertension", "Physical Inactivity", "Cholesterol Abnormalities", "Smoking", "Diabetes", "Nutrition"]
-        dis_list = ["Stroke", "Acute Myocardial Infarction (Heart Attack)",  "Coronary Heart Disease", "Major Cardiovascular Disease"]
+        # rf_list = ["Obesity", "Hypertension", "Physical Inactivity", "Cholesterol Abnormalities", "Smoking", "Diabetes", "Nutrition"]
+        rf_list = ["current smoking", "diabetes", "hypertension medication use", "physical inactivity", "consuming fruits and vegetables less than 5 times per day", "high total cholesterol", "cholesterol screening in the past 5 years", "obesity", "hypertension"]
+        dis_list = ["stroke", "acute myocardial infarction (heart attack)",  "coronary heart disease", "major cardiovascular disease"]
         for rf in data['risk_factors']:
-            if rf not in rf_list:
-                return jsonify({"Error": f"{rf} not a valid parameter for risk factor. Valid parameters include {topic_param}"})
-        if data['disease'] not in dis_list:
-            return jsonify({"Error": f"{data['disease']} not a valid parameter for location. Valid parameters include {topic_param}"})
+            if rf.lower() not in rf_list:
+                return jsonify({"Error": f"{rf} not a valid parameter for risk factor. Valid parameters include {rf_list}"})
+        if data['disease'].lower() not in dis_list:
+            return jsonify({"Error": f"{data['disease']} not a valid parameter for location. Valid parameters include {dis_list}"})
     
     # Add job to the queue
     if should_continue:
