@@ -143,7 +143,7 @@ Follow these steps after "To Build Image". Execute the following commands after 
   
   then use the following command:
   ```bash
-     sed -i 's/10.233.6.102/10.233.49.119/g' kubernetes/prod/*.yml
+     sed -i 's/10.233.6.102/10.233.49.119/g' prod/*.yml
   ```
     
   Make sure to replace 10.233.6.102 with the correct current value and 10.233.49.119 with the correct redis service IP.
