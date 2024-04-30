@@ -112,6 +112,10 @@ Follow these steps after "To Build Image". Execute the following commands after 
    ```
 2. Replace the Redis service cluster IP with the appropriate IP address in the flask-deployment and wrk-deployment yaml files.
    To find the Redis service IP address, use the following command:
+  ```bash
+      kubectl get services
+  ```
+   This should output:
    ```bash
       ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl get services
       NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
@@ -120,18 +124,27 @@ Follow these steps after "To Build Image". Execute the following commands after 
   In this case, the IP address is 10.233.49.119.
   To get the current values written in the flask and worker deployments, use:
   ```bash
-     ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease$ grep -r 10 kubernetes/prod/
-     kubernetes/prod/app-prod-flask-deployment.yml:                    value: '10.233.6.102'
-     kubernetes/prod/app-prod-wrk-deployment.yml:              value: '10.233.6.102'
+   grep -r 10 
+  ```
+  This should output:
+  ```bash
+     ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ grep -r 10 
+     app-prod-flask-deployment.yml:                    value: '10.233.6.102'
+     app-prod-wrk-deployment.yml:              value: '10.233.6.102'
     ```
-    To replace all isntances of 10.233.6.102 with 10.233.49.119, use the following command:
+    To replace all instances of 10.233.6.102 with 10.233.49.119, navigate out of the prod folder with
+    ```bash
+    cd ../
+    ```
+    then use the following command:
     ```bash
        sed -i 's/10.233.6.102/10.233.49.119/g' kubernetes/prod/*.yml
   ```
   Make sure to replace 10.233.6.102 with the correct current value and 10.233.49.119 with the correct redis service IP.
   
-3. Finally, apply the remaining kubernetes files to launch the flask, worker, nodeport, and ingress services. 
+3. Finally, navigate back into the prod/ folder then apply the remaining kubernetes files to launch the flask, worker, nodeport, and ingress services. 
     ```bash
+       cd prod/
        kubectl apply -f app-prod-flask-deployment.yml
        kubectl apply -f app-prod-flask-service.yml
        kubectl apply -f app-prod-wrk-deployment.yml
