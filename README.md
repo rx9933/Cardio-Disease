@@ -110,17 +110,20 @@ Follow these steps after "To Build Image". Execute the following commands after 
       NAME                     TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
       app-prod-redis-service   ClusterIP   10.233.6.102   <none>        6379/TCP   5m5s
    ```
+
 2. Replace the Redis service cluster IP with the appropriate IP address in the flask-deployment and wrk-deployment yaml files.
    To find the Redis service IP address, use the following command:
   ```bash
       kubectl get services
   ```
-   This should output:
+
+  This should output:
    ```bash
       ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl get services
       NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
       app-prod-redis-service   ClusterIP   10.233.49.119   <none>        6379/TCP   24s
   ```
+
   In this case, the IP address is 10.233.49.119.
   To get the current values written in the flask and worker deployments, use:
   ```bash
@@ -131,15 +134,18 @@ Follow these steps after "To Build Image". Execute the following commands after 
      ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ grep -r 10 
      app-prod-flask-deployment.yml:                    value: '10.233.6.102'
      app-prod-wrk-deployment.yml:              value: '10.233.6.102'
-    ```
+  ```
+
     To replace all instances of 10.233.6.102 with 10.233.49.119, navigate out of the prod folder with
     ```bash
     cd ../
     ```
+    
     then use the following command:
     ```bash
        sed -i 's/10.233.6.102/10.233.49.119/g' kubernetes/prod/*.yml
-  ```
+    ```
+    
   Make sure to replace 10.233.6.102 with the correct current value and 10.233.49.119 with the correct redis service IP.
   
 3. Finally, navigate back into the prod/ folder then apply the remaining kubernetes files to launch the flask, worker, nodeport, and ingress services. 
