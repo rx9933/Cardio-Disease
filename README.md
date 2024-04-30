@@ -83,14 +83,14 @@ Follow these steps after "To Build Image". Execute the following commands after 
 1.  Create a persistent volume claim (PVC) for redis, a redis deployment that binds to the PVC, and a redis service.
     Use the following command: 
     ```bash
-       kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
+     kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
     ```
     This should output:
     ```bash
-       ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
-       persistentvolumeclaim/app-prod-redis created
-       deployment.apps/app-prod-redis-deployment created
-       service/app-prod-redis-service created
+     ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-redis-pvc.yml && kubectl apply -f app-prod-redis-deployment.yml && kubectl apply -f app-prod-redis-service.yml
+     persistentvolumeclaim/app-prod-redis created
+     deployment.apps/app-prod-redis-deployment created
+     service/app-prod-redis-service created
     ```
    
    To ensure the Redis deployment is correctly running and the PVC is properly bound.
@@ -150,25 +150,25 @@ Follow these steps after "To Build Image". Execute the following commands after 
   
 3. Finally, navigate back into the prod/ folder then apply the remaining kubernetes files to launch the flask, worker, nodeport, and ingress services. 
     ```bash
-       cd prod/
-       kubectl apply -f app-prod-flask-deployment.yml
-       kubectl apply -f app-prod-flask-service.yml
-       kubectl apply -f app-prod-wrk-deployment.yml
-       kubectl apply -f app-prod-nodeport-service.yml
-       kubectl apply -f app-prod-ingress.yml
+     cd prod/
+     kubectl apply -f app-prod-flask-deployment.yml
+     kubectl apply -f app-prod-flask-service.yml
+     kubectl apply -f app-prod-wrk-deployment.yml
+     kubectl apply -f app-prod-nodeport-service.yml
+     kubectl apply -f app-prod-ingress.yml
     ```
     This should output:
     ```bash
-       ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-flask-deployment.yml
-       kubectl apply -f app-prod-flask-service.yml
-       kubectl apply -f app-prod-wrk-deployment.yml
-       kubectl apply -f app-prod-nodeport-service.yml
-       kubectl apply -f app-prod-ingress.yml
-       deployment.apps/app-prod-flask-deployment created
-       service/app-prod-flask-service created
-       deployment.apps/app-prod-wrk-deployment created
-       service/nodeport-service created
-       ingress.networking.k8s.io/app-ingress created
+     ubuntu@a2097855-coe332-vm:~/FinalProject/Cardio-Disease/kubernetes/prod$ kubectl apply -f app-prod-flask-deployment.yml
+     kubectl apply -f app-prod-flask-service.yml
+     kubectl apply -f app-prod-wrk-deployment.yml
+     kubectl apply -f app-prod-nodeport-service.yml
+     kubectl apply -f app-prod-ingress.yml
+     deployment.apps/app-prod-flask-deployment created
+     service/app-prod-flask-service created
+     deployment.apps/app-prod-wrk-deployment created
+     service/nodeport-service created
+     ingress.networking.k8s.io/app-ingress created
     ```
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#routes)
