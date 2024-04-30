@@ -136,15 +136,15 @@ Follow these steps after "To Build Image". Execute the following commands after 
      app-prod-wrk-deployment.yml:              value: '10.233.6.102'
   ```
 
-    To replace all instances of 10.233.6.102 with 10.233.49.119, navigate out of the prod folder with
-    ```bash
-    cd ../
-    ```
-    
-    then use the following command:
-    ```bash
-       sed -i 's/10.233.6.102/10.233.49.119/g' kubernetes/prod/*.yml
-    ```
+  To replace all instances of 10.233.6.102 with 10.233.49.119, navigate out of the prod folder with
+  ```bash
+  cd ../
+  ```
+  
+  then use the following command:
+  ```bash
+     sed -i 's/10.233.6.102/10.233.49.119/g' kubernetes/prod/*.yml
+  ```
     
   Make sure to replace 10.233.6.102 with the correct current value and 10.233.49.119 with the correct redis service IP.
   
