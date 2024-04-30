@@ -160,10 +160,10 @@ def graph_rf(para:dict):
     plt.title(f"Prevalence of {disease.title()} and Associated Risk Factors Amoung the {breakout} Population in {location.title()}", fontsize=10)
     logger.debug(f"graph labels = {graph_labels}")
     graph_labels = ['\n'.join(wrap(i, 20)) for i in graph_labels]
-    plt.legend(graph_labels, loc='center left', bbox_to_anchor=(1, 0.5))
+    plt.legend(graph_labels, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=7)
     
     # saving image to results db
-    plt.savefig('/output_image.png', bbox_inches='tight', fontsize=7)
+    plt.savefig('/output_image.png', bbox_inches='tight')
     return
 
 @q.worker
