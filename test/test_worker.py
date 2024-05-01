@@ -1,5 +1,7 @@
 import requests
 import time
+from worker.py import detrend_data, plot_data, calculate_correlation
+from unittest import mock
 
 def test_return_topics() -> None:
     """
@@ -122,3 +124,49 @@ def test_test_work() -> None:
             break
     response = requests.get(f'http://localhost:5000/results/{job_id}')
     assert response.json()["random output parameter 1"] == "1st output parameter value"
+
+def test_graph_rf():
+    response = requests.post('http://localhost:5000/jobs/graph_rf', json={})
+
+    assert response.status_code == 200
+
+    # test when expected result is acheived
+    
+    # test when there is no data found
+
+def test_select_series():
+    # mock rd?
+
+    # test when there is no data to be added in the series
+
+    # test when you get the expected result
+
+def test_detrend_data():
+    xy = {0.5: 9.25, 1: 7.6, 1.5: 8.25, 2: 6.5, 2.5: 5.45, 3: 4.5, 3.5: 1.75, 4: 1.8}
+    assert isinstance(detrend_data(xy), dict)
+    assert detrend_data(xy)[0.5] == pytest.approx(9.25 - (10.657 - 2.231*0.5))
+    assert isinstance(detrend_data(xy)[2], float)
+
+def test_correlation():
+    response = requests.get(f'http://localhost:5000/jobs/correlation', json={})
+    assert = response.status_code == 200
+    # test the correlations function
+
+def test_calculate_correlation():
+    # abc
+    x = [1, 2, 3, 4, 5]
+    y = [1, 2, 3, 4, 5]
+    x2 = [43, 21, 25, 42, 57, 59]
+    y2 = [99, 65, 79, 75, 87, 81]
+    assert calculate_correlation(x, y) == pytest.approx(1.0)
+    assert calculate_correlation(x2, y2) == pytest.approx(0.5298)
+
+def test_plot_data():
+    xy_data = {"linear graph": {1:1, 2:2, 3:3, 4:4, 5:5}, "quadratic": {1:1, 2:4, 3:9, 4:16}}
+    plot_data(xy_data, "title", "x_label", "y_label")
+    # tests from the internet??
+    mock_plt.title.assert_called_once_with("title")
+    mock_plt.xlabel.assert_called_once_with("x_label")
+    mock_plt.ylabel.assert_called_once_with("y_label")
+    assert mock_plt.figure.called
+
