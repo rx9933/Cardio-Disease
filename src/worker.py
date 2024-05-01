@@ -114,7 +114,7 @@ def select_series(location:str, breakout:str, topic:str):
                 continue
         else:
             continue
-    logger.info(f"Select series function ended, indicator = {indicator}")
+    logger.info(f"Select series function ended for topic {topic}")
     return return_dict
 
 def graph_rf(para:dict):
@@ -159,7 +159,7 @@ def graph_rf(para:dict):
     plt.ylabel(f"Age Standardized Rate (%)")
     plt.title(f"Prevalence of {disease.title()} and Associated Risk Factors Amoung the {breakout} Population in {location.title()}", fontsize=10)
     logger.debug(f"graph labels = {graph_labels}")
-    graph_labels = ['\n'.join(wrap(i, 20)) for i in graph_labels]
+    graph_labels = ['\n'.join(wrap(i, 25)) for i in graph_labels]
     plt.legend(graph_labels, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=7)
     
     # saving image to results db
