@@ -145,7 +145,11 @@ def graph_rf(para:dict):
         breakout = 'Overall'
     # set the detrend to False if it does not exist
     if 'detrend' in para.keys():
-        detrend = bool(para['detrend'])
+        detrend = para['detrend']
+        if detrend == "True":
+            detrend = True
+        elif detrend == "False":
+            detrend = False
     else:
         logger.warning(f"No parameter was provided for detrend")
         detrend = False
@@ -161,7 +165,7 @@ def graph_rf(para:dict):
         rf_sorted = {}
         for i in sorted(rf_data.keys()):
             rf_sorted[int(i)] = float(rf_data[i])
-        if detrend:
+        if detrend == True:
             rf_sorted = detrend_data(rf_sorted)
             ylabel = "Detrended Age Standardized Rate (%)"
         label = f"Prevalence of {risk_factor.lower()} among US adults"
