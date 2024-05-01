@@ -140,7 +140,8 @@ def graph_rf(para:dict):
     else:
         logger.warning(f"No parameter was provided for breakout category")
         breakout = 'Overall'
-    
+
+    plt.close()
     graph_labels = []
     risk_factors.append(disease)
     # loop through all risk factors and diseases to graph
@@ -157,7 +158,7 @@ def graph_rf(para:dict):
     # plot info
     plt.xlabel("Year")
     plt.ylabel(f"Age Standardized Rate (%)")
-    plt.title(f"Prevalence of {disease.title()} and Associated Risk Factors Amoung the {breakout} Population in {location.title()}", fontsize=10)
+    plt.title(f"Prevalence of {disease.title()} and Associated Risk Factors Among the {breakout} Population in {location.title()}", fontsize=10)
     logger.debug(f"graph labels = {graph_labels}")
     graph_labels = ['\n'.join(wrap(i, 25)) for i in graph_labels]
     plt.legend(graph_labels, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=7)

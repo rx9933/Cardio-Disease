@@ -133,13 +133,13 @@ def submit_job(functName:str):
             return jsonify({"Error": f"Invalid parameters for graph_rf in {paras}"})
         # Check if the sorted keys contains at least disease and risk factor
         if ('risk_factors' not in keys_set) and ('disease' not in keys_set):
-            logger.warning("Must contain disease and risk_factor")
-            return jsonify({"Error": f"Parameters must contain 'disease' and 'risk_factor'"})
+            logger.warning("Must contain disease and risk_factors")
+            return jsonify({"Error": f"Parameters must contain 'disease' and 'risk_factors'"})
         # test if brekaout is a valid breakout
         if 'breakout' in keys_set:
             breakout_list = ["Male","Other", "Female", "75+", "Non-Hispanic Asian", "Non-Hispanic White", "Overall", "Hispanic", "65+", "45-64", "20-24", "Non-Hispanic Black", "35+", "25-44", "18-24"]
             if data['breakout'] not in breakout_list:
-                return jsonify({"Error": f"{data['breakout']} not a valid parameter for breakout. Valid parameters include {breakout_param}"})
+                return jsonify({"Error": f"{data['breakout']} not a valid parameter for breakout. Valid parameters include {breakout_list}"})
         if 'location' in keys_set:
             location_param1 = all_categories('locationdesc')
             location_param2 = all_categories('locationabbr')
