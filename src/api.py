@@ -106,7 +106,7 @@ def submit_job(functName:str):
         job_dict: a dictionary of the job information (the input parameters, function name, current status (submitted), etc.)
     """
     logger.info(f"Received POST request for job '{functName}'.")
-    worker_functs = ["return_topics","test_work","max_affected", "graph_rf"]
+    worker_functs = ["return_topics","test_work","max_affected", "graph_rf", "correlation"]
     if not(functName in worker_functs):
          return jsonify({"error": "Invalid function name."}), 400
     should_continue = True
@@ -125,8 +125,8 @@ def submit_job(functName:str):
                 x = data[elem]
             except:
                 data[elem] = ""
-    elif functName == "graph_rf":
-        paras = {'breakout', 'risk_factors', 'disease', 'location'}
+    elif functName == "graph_rf" or functName == "correlation":
+        paras = {'breakout', 'risk_factors', 'disease', 'location', 'detrend'}
         keys_set = set(data.keys())
         if keys_set > paras:
             logger.warning("Invalid parameters")
@@ -140,6 +140,10 @@ def submit_job(functName:str):
             breakout_list = ["Male","Other", "Female", "75+", "Non-Hispanic Asian", "Non-Hispanic White", "Overall", "Hispanic", "65+", "45-64", "20-24", "Non-Hispanic Black", "35+", "25-44", "18-24"]
             if data['breakout'] not in breakout_list:
                 return jsonify({"Error": f"{data['breakout']} not a valid parameter for breakout. Valid parameters include {breakout_list}"})
+        if 'detrend' in keys_set:
+            if data['detrend'] != "True" and data['detrend'] != "False":
+                logger.warning("'detrend' parameter must be a string representation of a boolean")
+                return jsonify({"Error": f"{data['detrend']} not a valid parameter for detrend. Valid parameter must be a string representation of a boolean"})
         if 'location' in keys_set:
             location_param1 = all_categories('locationdesc')
             location_param2 = all_categories('locationabbr')
