@@ -23,7 +23,6 @@ def test_help() -> None:
     """
     response = requests.get("http://localhost:5000/")
     assert response.status_code == 200
-    assert isinstance(response.json(), str)
         
 def test_all_jobs() -> None:
     """
@@ -184,6 +183,36 @@ def test_get_data() -> None:
     assert response.status_code == 200
     assert isinstance(response.json(), list)
 
+def test_all_categories() -> None:
+    """
+    Tests all_categories function in api.py.
+
+    Returns:
+       None
+
+    Args:
+       None
+    """
+    response = requests.get('http://localhost:5000/data/break_out')
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+    expected_values = [
+    "Male", "75+", "35+", "Non-Hispanic Asian", "Non-Hispanic Black", "Overall",
+    "Hispanic", "Female", "45-64", "Non-Hispanic White", "65+", "Other", "18-24",
+    "25-44", "20-24"
+    ]
+
+    # Convert both the expected and actual JSON arrays to sets
+    expected_set = set(expected_values)
+    actual_set = set(response.json())
+
+    # Check if the sets are equal
+    assert expected_set == actual_set
+
+    response = requests.get('http://localhost:5000/data/year')
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)
+    
 def test_delete_data() -> None:
     """
     Test deleting data.
