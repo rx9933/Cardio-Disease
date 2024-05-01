@@ -513,7 +513,7 @@ There are currently 3 job functions that can be run. Note that these are in addi
        ```
    or the status might be completed/submitted.
 
- * To check the results of the job:
+   * To check the results of the job:
      ```bash
         curl localhost:5000/results/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
      ```
@@ -526,7 +526,7 @@ There are currently 3 job functions that can be run. Note that these are in addi
         ```bash
             "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
        ```
- * To download the image, use:
+   * To download the image, use:
        ```bash
         curl localhost:5000/download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
        ```
