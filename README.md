@@ -468,7 +468,7 @@ There are currently 3 job functions that can be run. Note that these are in addi
       Result not found for the specified Job ID. Check completion status of job.
    ```
 
-   4. graph_rf:
+4. graph_rf:
   
        * To instantiate a job for max_affected:
       ```bash
