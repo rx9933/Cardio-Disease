@@ -373,10 +373,10 @@ def plot_data(xy_data:dict, title:str, xlabel:str, ylabel:str):
     # plot info
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.title(title, fontsize=10)
+    plt.title('\n'.join(wrap(title, 75)), fontsize=10)
     logger.debug(f"graph labels = {graph_labels}")
     graph_labels = ['\n'.join(wrap(i, 25)) for i in graph_labels]
-    plt.legend(graph_labels, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=7)
+    plt.legend(graph_labels, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=7, labelspacing=2)
     
     # saving image to results db
     plt.savefig('/output_image.png', bbox_inches='tight')
