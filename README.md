@@ -228,8 +228,33 @@ The following are various curl commands/routes that can be utilized:
     ```bash
       curl localhost:5000/data/<category>
     ```
-  #ADD INFO HERE#
-
+  The different categories that can be used are: (['row_id', 'year', 'locationabbr', 'locationdesc', 'datasource', 'priorityarea1', 'priorityarea3', 'category', 'topic', 'indicator', 'data_value_type', 'data_value_unit', 'data_value_alt', 'data_value_footnote_symbol', 'data_value_footnote', 'break_out_category', 'break_out', 'categoryid', 'topicid', 'indicatorid', 'data_value_typeid', 'breakoutcategoryid', 'breakoutid', 'locationid', 'geolocation']
+  An example command is:
+  ```bash
+   curl cardio-app.coe332.tacc.cloud/data/break_out
+  ```
+  This would return:
+  ```bash
+  [
+  "Other",
+  "Non-Hispanic Asian",
+  "Non-Hispanic White",
+  "Hispanic",
+  "Non-Hispanic Black",
+  "Overall",
+  "65+",
+  "45-64",
+  "Female",
+  "35+",
+  "25-44",
+  "75+",
+  "Male",
+  "18-24",
+  "20-24"
+]
+  ```
+  These are the different break_out categories. 
+   
     *Note*: Data on Redis is required for any data analysis; that is how the worker.py gets the data as input. As such, data deletion is not advised to be performed before adding/curling job requests. Doing so will result in empty/uninteresting results as output. 
    
 3. Job Functionality
@@ -266,7 +291,7 @@ The following are various curl commands/routes that can be utilized:
    
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#jobfunctions)
 # Job Functions
-There are currently 3 job functions that can be run. Note that these are in addition to the flask routes detailed in Redis Functionality (1). Each of the commands listed in Job Functionality can be applied to each of the 3 jobs (test_work, return_topics, and max_affected). *Note*: for the example routes shown below, the job id should be replaced with the job id that the user's receive to screen. 
+There are currently 3 job functions that can be run. Note that these are in addition to the flask routes detailed in Redis Functionality (1). Each of the commands listed in Job Functionality can be applied to each of the 4 jobs (test_work, return_topics, max_affected, and graph_rf). *Note*: for the example routes shown below, the job id should be replaced with the job id that the user's receive to screen. 
 1. test_work: this function is just a work simulation. No real analysis is performed; the worker just sleeps for 20 seconds before returning a random output.
       * To instantiate a job for return_topics:
    ```bash
@@ -442,6 +467,71 @@ There are currently 3 job functions that can be run. Note that these are in addi
    ```bash
       Result not found for the specified Job ID. Check completion status of job.
    ```
+
+   4. graph_rf:
+  
+       * To instantiate a job for max_affected:
+      ```bash
+      curl localhost:5000/jobs/graph_rf -X POST -d '{"disease":"Stroke", "risk_factors":["Smoking"], "location":"Texas", "breakout_params":"65+"}' -H "Content-Type: application/json"
+      ```
+     Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
+ 
+      This returns:
+      ```bash
+            {
+        "function_name": "graph_rf",
+        "id": "0f0f6371-c837-4e65-a918-e0b3b74b1bd4",
+        "input_parameters": {
+          "disease": "Stroke",
+          "location": "Texas",
+          "risk_factors": [
+            "Smoking"
+          ]
+        },
+        "status": "submitted"
+      }
+      ```
+
+      * To check the status of the job:
+       ```bash
+          curl localhost:5000/jobs/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
+       ```
+      this will return:
+       ```bash
+               {
+            "function_name": "graph_rf",
+            "id": "0f0f6371-c837-4e65-a918-e0b3b74b1bd4",
+            "input_parameters": {
+              "disease": "Stroke",
+              "location": "Texas",
+              "risk_factors": [
+                "Smoking"
+              ]
+            },
+            "status": "in progress"
+          }
+       ```
+   or the status might be completed/submitted.
+
+   * To check the results of the job:
+     ```bash
+        curl localhost:5000/results/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
+     ```
+     
+      this will return:
+       ```bash
+            Result not found for the specified Job ID. Check completion status of job.
+       ```
+       or
+        ```bash
+            "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
+       ```
+     * To download the image, use:
+       ```bash
+        curl localhost:5000/download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
+       ```
+       This will download a png image of the graph to your terminal. For easy viewing, performing these steps (submitting and downloading the job) via the Kubernetes platform (detailed below), so that the image can be loaded directly on your computer.
+       
    
 # Using Kubernetes
 If Kubernetes is launched correctly, all commands as described in Routes and Jobs can be written from the a local terminal (which does not have docker or kubernetes installed). Additionally, all get requests can be launched from the internet. Post or delete requests can also be launched from the internet if an API like Postman is used.
