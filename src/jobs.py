@@ -133,7 +133,7 @@ def add_job(functName:str,parameters:dict, status="submitted"):
     jid = _generate_jid()
     job_dict = _instantiate_job(jid, status, functName, parameters)
 
-    worker_functs = ['__annotations__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', 'cardio_data', 'do_work', 'return_topics', 'test_work','max_affected', 'graph_rf', 'correlation']
+    worker_functs = ['__annotations__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', 'cardio_data', 'do_work', 'return_topics', 'test_work','max_affected', 'graph_rf', 'correlation', 'graph_correlation']
     if functName not in worker_functs:
          logger.warning("Incorrect function call for job with ID %s", jid)
          update_job_status(jid, "error", output={"incorrect function call": "job not submitted"})
