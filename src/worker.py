@@ -80,7 +80,7 @@ def test_work(para:dict):
 
 def sort_data(para:dict):
     '''
-    Given a set of parameters, this 
+    Given a set of data points... 
     '''
     return
 
@@ -300,7 +300,50 @@ def calculate_correlation(x:list, y:list):
 def graph_correlation(para:dict):
     '''
     Graphs the correlation between two variables.
+    Inputs:
+        para (dict): This is a dictionary of parameters: 'breakout' (str) for break out (default to overall), 'disease' (str) for the disease, 'risk_factor' (list) for the list of risk factors, 'location' (lst) for the location (default to USM)
     '''
+    risk_factors = para['risk_factors']
+    disease = para['disease']
+    # set the location default to USM
+    if 'location' in para.keys():
+        location = para['location']
+    else:
+        logger.warning(f"No paramerter was provided for location. Default to USM")
+        location = 'Median of all states'
+    #set the breakout to Overall if it does not exist
+    if 'breakout' in para.keys():
+        breakout = para['breakout']
+    else:
+        logger.warning(f"No parameter was provided for breakout category")
+        breakout = 'Overall'
+    
+    # select disease series, sort, + detrend
+    dis_data = select_series(location=location, topic=disease, breakout=breakout)
+    dis_sorted = {}
+    for i in sorted(dis_data.keys()):
+        dis_sorted[int(i)] = float(dis_data[i])
+    dis_sorted = detrend_data(dis_sorted)
+    
+    data_to_plot = {}
+    # loop through rf, select series, sort + detrend
+    for risk_factor in risk_factors:
+        label = f"{risk_factor.title()}"
+        rf_data = select_series(location=location, topic=risk_factor, breakout=breakout)
+        # sort data and put in the correct type
+        rf_sorted = {}
+        for i in sorted(rf_data.keys()):
+            rf_sorted[int(i)] = float(rf_data[i])
+        # detrend the series
+        rf_sorted = detrend_data(rf_sorted)
+
+        # graph the values of these functions against each other
+        data_to_plot[label] = {}
+        years_intersect = set(dis_sorted.keys()).intersection(set(rf_sorted.keys()))
+        for year in years_intersect:
+            data_to_plot[label][dis_sorted[year]] = rf_sorted[year]
+
+    plot_data(data_to_plot, title=f"Correlation Between {disease.title()} and Associated Risk Factors Among the {breakout} Population in {location.title()}", xlabel=f"Detrended {disease.lower()} rate", ylabel=f"Detrended risk factor rate" )
     return
 
 def plot_data(xy_data:dict, title:str, xlabel:str, ylabel:str):
@@ -314,6 +357,11 @@ def plot_data(xy_data:dict, title:str, xlabel:str, ylabel:str):
     '''
     plt.close()
     
+    # sort all data
+    xy_data_sorted = {}
+    for key in xy_data.keys():
+        xy_data[key] = dict(sorted(xy_data[key].items()))
+
     graph_labels = []
     # for a each item in xy_data, plot the x and y values
     for key in xy_data.keys():
@@ -325,10 +373,10 @@ def plot_data(xy_data:dict, title:str, xlabel:str, ylabel:str):
     # plot info
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    plt.title(title, fontsize=10)
+    plt.title('\n'.join(wrap(title, 75)), fontsize=10)
     logger.debug(f"graph labels = {graph_labels}")
     graph_labels = ['\n'.join(wrap(i, 25)) for i in graph_labels]
-    plt.legend(graph_labels, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=7)
+    plt.legend(graph_labels, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=7, labelspacing=2)
     
     # saving image to results db
     plt.savefig('/output_image.png', bbox_inches='tight')
@@ -351,7 +399,7 @@ def do_work(jobid:str):
 
     output = eval(functName)(input_para)
     # opening image and saving in redis
-    if functName == 'graph_rf':
+    if functName == 'graph_rf' or functName == 'graph_correlation':
         with open('/output_image.png', 'rb') as f:
             img = f.read()
         res_db.set(jobid, img)

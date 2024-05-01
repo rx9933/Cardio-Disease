@@ -106,7 +106,7 @@ def submit_job(functName:str):
         job_dict: a dictionary of the job information (the input parameters, function name, current status (submitted), etc.)
     """
     logger.info(f"Received POST request for job '{functName}'.")
-    worker_functs = ["return_topics","test_work","max_affected", "graph_rf", "correlation"]
+    worker_functs = ["return_topics","test_work","max_affected", "graph_rf", "correlation", "graph_correlation"]
     if not(functName in worker_functs):
          return jsonify({"error": "Invalid function name."}), 400
     should_continue = True
@@ -125,7 +125,7 @@ def submit_job(functName:str):
                 x = data[elem]
             except:
                 data[elem] = ""
-    elif functName == "graph_rf" or functName == "correlation":
+    elif functName == "graph_rf" or functName == "correlation" or functName == "graph_correlation":
         paras = {'breakout', 'risk_factors', 'disease', 'location', 'detrend'}
         keys_set = set(data.keys())
         if keys_set > paras:
