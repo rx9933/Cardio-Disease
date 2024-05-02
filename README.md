@@ -228,32 +228,32 @@ The following are various curl commands/routes that can be utilized:
     ```bash
       curl localhost:5000/data/<category>
     ```
-  The different categories that can be used are: (['row_id', 'year', 'locationabbr', 'locationdesc', 'datasource', 'priorityarea1', 'priorityarea3', 'category', 'topic', 'indicator', 'data_value_type', 'data_value_unit', 'data_value_alt', 'data_value_footnote_symbol', 'data_value_footnote', 'break_out_category', 'break_out', 'categoryid', 'topicid', 'indicatorid', 'data_value_typeid', 'breakoutcategoryid', 'breakoutid', 'locationid', 'geolocation']
-  An example command is:
-  ```bash
-   curl cardio-app.coe332.tacc.cloud/data/break_out
+    The different categories that can be used are: (['row_id', 'year', 'locationabbr', 'locationdesc', 'datasource', 'priorityarea1', 'priorityarea3', 'category', 'topic', 'indicator', 'data_value_type', 'data_value_unit', 'data_value_alt', 'data_value_footnote_symbol', 'data_value_footnote', 'break_out_category', 'break_out', 'categoryid', 'topicid', 'indicatorid', 'data_value_typeid', 'breakoutcategoryid', 'breakoutid', 'locationid', 'geolocation']
+    An example command is:
+    ```bash
+     curl cardio-app.coe332.tacc.cloud/data/break_out
+    ```
+    This would return:
+    ```bash
+    [
+    "Other",
+    "Non-Hispanic Asian",
+    "Non-Hispanic White",
+    "Hispanic",
+    "Non-Hispanic Black",
+    "Overall",
+    "65+",
+    "45-64",
+    "Female",
+    "35+",
+    "25-44",
+    "75+",
+    "Male",
+    "18-24",
+    "20-24"
+  ]
   ```
-  This would return:
-  ```bash
-  [
-  "Other",
-  "Non-Hispanic Asian",
-  "Non-Hispanic White",
-  "Hispanic",
-  "Non-Hispanic Black",
-  "Overall",
-  "65+",
-  "45-64",
-  "Female",
-  "35+",
-  "25-44",
-  "75+",
-  "Male",
-  "18-24",
-  "20-24"
-]
-  ```
-  These are the different break_out categories. 
+    These are the different break_out categories. 
    
     *Note*: Data on Redis is required for any data analysis; that is how the worker.py gets the data as input. As such, data deletion is not advised to be performed before adding/curling job requests. Doing so will result in empty/uninteresting results as output. 
    
