@@ -144,6 +144,19 @@ def test_add_and_delete_job() -> None:
     job_id = add_response.json()["id"]
     logging.error(f"{requests.get(f'http://localhost:5000/jobs/{job_id}').json()}")
 
+
+    url = 'http://localhost:5000/jobs/correlation'
+    data = {
+        'breakout': 'Overall',
+        'risk_factors': ['Obesity', 'Physical Inactivity', 'consuming fruits and vegetables less than 5 times per day'],
+        'disease': 'Coronary Heart Disease',
+        'location': 'Texas'
+    }
+    headers = {'Content-Type': 'application/json'}
+    
+    response = requests.post(url, json=data, headers=headers)
+    assert add_response.status_code == 200
+
     # Delete all jobs
     delete_response = requests.delete('http://localhost:5000/jobs/delete')
     assert delete_response.status_code == 200
@@ -212,6 +225,59 @@ def test_all_categories() -> None:
     response = requests.get('http://localhost:5000/data/year')
     assert response.status_code == 200
     assert isinstance(response.json(), list)
+
+def test_download_job() -> None:
+     """
+    Tests all_categories function in api.py.
+
+    Returns:
+       None
+
+    Args:
+       None
+    """
+    
+    url = 'http://localhost:5000/jobs/graph_rf'
+    data = {
+    'disease': 'stroke',
+    'risk_factors': ['current smoking'],
+    'location': 'Texas',
+    'breakout_params': '65+'
+        }
+    
+    headers = {'Content-Type': 'application/json'}
+    
+    response = requests.post(url, json=data, headers=headers)
+    assert response.status_code == 200
+
+    job_id = response.json()["id"]
+    while True:
+        time.sleep(1)
+        job_response = requests.get(f'http://localhost:5000/jobs/{job_id}')
+        if job_response.json()["status"] == "complete":
+            break
+    response = requests.get(f'http://localhost:5000/results/{job_id}')
+    assert response.status_code == 200
+
+    url = 'http://localhost:5000/jobs/correlation'
+    data = {
+        'breakout': 'Overall',
+        'risk_factors': ['Obesity', 'Physical Inactivity', 'consuming fruits and vegetables less than 5 times per day'],
+        'disease': 'Coronary Heart Disease',
+        'location': 'Texas'
+    }
+    headers = {'Content-Type': 'application/json'}
+    
+    response = requests.post(url, json=data, headers=headers)
+    job_id = response.json()["id"]
+    while True:
+        time.sleep(1)
+        job_response = requests.get(f'http://localhost:5000/jobs/{job_id}')
+        if job_response.json()["status"] == "complete":
+            break
+    response = requests.get(f'http://localhost:5000/results/{job_id}')
+    assert response.status_code == 200
+
     
 def test_delete_data() -> None:
     """
