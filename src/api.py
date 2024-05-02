@@ -222,7 +222,7 @@ def get_result_by_id(jid:str):
     """
     result = res_db.get(jid)
     if result is not None:
-        if get_job(jid)['function_name'] == 'graph_rf':
+        if get_job(jid)['function_name'] == 'graph_rf' or get_job(jid)['function_name'] == 'graph_correlation':
             result = f"Image is available for download with the route /download/{jid}"
             return result
         return json.loads(result)
