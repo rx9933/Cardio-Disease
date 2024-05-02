@@ -2,7 +2,7 @@ import requests
 import time
 from unittest import mock
 from worker import return_topics, max_affected, graph_rf, select_series, plot_data, calculate_correlation, detrend_data
-
+from textwrap import wrap
 
 def test_return_topics() -> None:
     response = requests.post('http://localhost:5000/data')
@@ -54,14 +54,14 @@ def test_graph_rf():
 
     assert response.status_code == 200
 
-    response = requests.post('http://localhost:5000/jobs/graph_rf', json={"disease":"Stroke", "breakout_params":"65+", "risk_factors":["Smoking", "Physical Inactivity"], "location":"Texas"})
+    response = requests.post('http://localhost:5000/jobs/graph_rf', json={"disease":"Stroke", "breakout":"65+", "risk_factors":["Smoking", "Physical Inactivity"], "location":"Texas"})
 
     assert response.status_code == 200
     assert response.json() == {
   "Error": "Smoking not a valid parameter for risk factor. Valid parameters include ['current smoking', 'diabetes', 'hypertension medication use', 'physical inactivity', 'consuming fruits and vegetables less than 5 times per day', 'high total cholesterol', 'cholesterol screening in the past 5 years', 'obesity', 'hypertension']"
 }
 
-    response = requests.post('http://localhost:5000/jobs/graph_rf', json={"disease":"Stroke", "breakout_params":"65+", "risk_factors":["current smoking", "physical inactivity"], "location":"Texas"})
+    response = requests.post('http://localhost:5000/jobs/graph_rf', json={"disease":"Stroke", "detrend": "True", "breakout":"65+", "risk_factors":["current smoking", "physical inactivity"], "location":"Texas"})
     
     keys = ['function_name', 'id', 'input_parameters', 'status']
     assert set(keys) == set(response.json().keys())
@@ -98,16 +98,51 @@ def test_calculate_correlation():
     y2 = [99, 65, 79, 75, 87, 81]
     assert calculate_correlation(x, y) == 1.0
     assert abs(calculate_correlation(x2, y2) - 0.5298) <=.1
-"""
-def test_plot_data():
-    xy_data = {"linear graph": {1:1, 2:2, 3:3, 4:4, 5:5}, "quadratic": {1:1, 2:4, 3:9, 4:16}}
-    plot_data(xy_data, "title", "x_label", "y_label")
-    # Mocking plt.title, plt.xlabel, plt.ylabel
-    mock_plt = mock.Mock()
-    with mock.patch('matplotlib.pyplot', mock_plt):
-        plot_data(xy_data, "title", "x_label", "y_label")
-        mock_plt.title.assert_called_once_with("title")
-        mock_plt.xlabel.assert_called_once_with("x_label")
-        mock_plt.ylabel.assert_called_once_with("y_label")
-        assert mock_plt.figure.called
-"""
+
+def test_graph_correlation():
+    response = requests.post('http://localhost:5000/jobs/graph_correlation', json={})
+
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:5000/jobs/graph_correlation', json={"disease":"Stroke", "breakout":"65+", "risk_factors":["Smoking", "Physical Inactivity"], "location":"Texas"})
+
+    assert response.status_code == 200
+    assert response.json() == {"Error": "Smoking not a valid parameter for risk factor. Valid parameters include ['current smoking', 'diabetes', 'hypertension medication use', 'physical inactivity', 'consuming fruits and vegetables less than 5 times per day', 'high total cholesterol', 'cholesterol screening in the past 5 years', 'obesity', 'hypertension']"}
+
+    response = requests.post('http://localhost:5000/jobs/graph_correlation', json={"disease":"Stroke", "breakout":"65+", "risk_factors":["current smoking", "physical inactivity"], "location":"Texas"})
+    keys = ['function_name', 'id', 'input_parameters', 'status']
+    assert set(keys) == set(response.json().keys())
+    job_id = response.json()["id"]
+
+    while True:
+        time.sleep(1)
+        job_response = requests.get(f'http://localhost:5000/jobs/{job_id}')
+        if job_response.json()["status"] == "complete":
+            break
+    response = requests.get(f'http://localhost:5000/results/{job_id}').json()
+    assert response == f"Image is available for download with the route /download/{job_id}"
+
+def test_correlation():
+    response = requests.post('http://localhost:5000/jobs/correlation', json={})
+
+    assert response.status_code == 200
+
+    response = requests.post('http://localhost:5000/jobs/correlation', json={"disease":"Stroke", "breakout":"65+", "risk_factors":["Smoking", "Physical Inactivity"], "location":"Texas"})
+
+    assert response.status_code == 200
+    assert response.json() == {"Error": "Smoking not a valid parameter for risk factor. Valid parameters include ['current smoking', 'diabetes', 'hypertension medication use', 'physical inactivity', 'consuming fruits and vegetables less than 5 times per day', 'high total cholesterol', 'cholesterol screening in the past 5 years', 'obesity', 'hypertension']"}
+
+    response = requests.post('http://localhost:5000/jobs/correlation', json={"disease":"Stroke", "breakout":"65+", "risk_factors":["current smoking", "physical inactivity"], "location":"Texas"})
+
+    keys = ['function_name', 'id', 'input_parameters', 'status']
+    assert set(keys) == set(response.json().keys())
+
+    job_id = response.json()["id"]
+
+    while True:
+        time.sleep(1)
+        job_response = requests.get(f'http://localhost:5000/jobs/{job_id}')
+        if job_response.json()["status"] == "complete":
+            break
+    response = requests.get(f'http://localhost:5000/results/{job_id}').json()
+    assert response == {"Correlation coefficient between current smoking and stroke": 0.24755237551034065, "Correlation coefficient between physical inactivity and stroke": 0.7364858201822571}
