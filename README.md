@@ -519,13 +519,13 @@ As an example, a test job is shown below:
       curl localhost:5000/results/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
    ```
    
-       this will return:
+   this will return:
    
    ```bash
         Result not found for the specified Job ID. Check completion status of job.
    ```
      
-       or
+     or
    
     ```bash
         "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
@@ -593,17 +593,17 @@ As an example, a test job is shown below:
         }
        ```
        
-   or the status might be completed/submitted.
+     or the status might be completed/submitted.
 
-     * To check the results of the job:
-     ```bash
-        curl localhost:5000/results/c5f83a04-e2fc-455a-94ca-3258a106f553
-     ```
-     
-      this will return:
+       * To check the results of the job:
        ```bash
-            Result not found for the specified Job ID. Check completion status of job.
+          curl localhost:5000/results/c5f83a04-e2fc-455a-94ca-3258a106f553
        ```
+       
+        this will return:
+         ```bash
+              Result not found for the specified Job ID. Check completion status of job.
+         ```
        
        or
      
