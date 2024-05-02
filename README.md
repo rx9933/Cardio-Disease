@@ -617,23 +617,24 @@ As an example, a test job is shown below:
      Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
  
       This returns:
-        ```bash
-                   {
-        "function_name": "graph_correlation",
-        "id": "5cfc13d7-7ba4-4210-8f9c-4d3319294d83",
-        "input_parameters": {
-          "breakout": "Overall",
-          "disease": "Coronary Heart Disease",
-          "location": "Texas",
-          "risk_factors": [
-            "Obesity",
-            "Physical Inactivity",
-            "consuming fruits and vegetables less than 5 times per day"
-          ]
-        },   
-        "
-         "status": "submitted"
-        }
+      
+      ```bash
+                 {
+      "function_name": "graph_correlation",
+      "id": "5cfc13d7-7ba4-4210-8f9c-4d3319294d83",
+      "input_parameters": {
+        "breakout": "Overall",
+        "disease": "Coronary Heart Disease",
+        "location": "Texas",
+        "risk_factors": [
+          "Obesity",
+          "Physical Inactivity",
+          "consuming fruits and vegetables less than 5 times per day"
+        ]
+      },   
+      "
+       "status": "submitted"
+      }
       ```
 
     * To check the status of the job:
