@@ -531,7 +531,7 @@ As an example, a test job is shown below:
         "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
     ```
    * To download the image, use:
-   * 
+     
    ```bash
     curl localhost:5000/download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4 --output out.png
    ```
@@ -542,14 +542,14 @@ As an example, a test job is shown below:
      ![plot](images/graphrf_ex.png)
      
 
-  6.  correlation: calculates the coefficient coefficient between the user-specified disease and various risk factors. 
-  * To instantiate a job for max_affected:
+  5.  correlation: calculates the coefficient coefficient between the user-specified disease and various risk factors. 
+    * To instantiate a job for max_affected:
       ```bash
       curl localhost:5000/jobs/correlation -X "POST" -d '{"breakout":"Overall", "risk_factors": ["Obesity", "Physical Inactivity", "consuming fruits and vegetables less than 5 times per day"], "disease": "Coronary Heart Disease", "location": "Texas"}' -H "Content-Type: application/json"
       ```
-     Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
- 
-      This returns:
+       Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
+   
+        This returns:
       ```bash
                  {
         "function_name": "correlation",
@@ -566,9 +566,9 @@ As an example, a test job is shown below:
         },
         "status": "submitted"
       }
-      ```
+        ```
 
-    * To check the status of the job:
+      *  To check the status of the job:
        ```bash
           curl localhost:5000/jobs/c5f83a04-e2fc-455a-94ca-3258a106f553
        ```
@@ -595,7 +595,7 @@ As an example, a test job is shown below:
        
    or the status might be completed/submitted.
 
-   * To check the results of the job:
+     * To check the results of the job:
      ```bash
         curl localhost:5000/results/c5f83a04-e2fc-455a-94ca-3258a106f553
      ```
