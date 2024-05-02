@@ -572,7 +572,9 @@ As an example, a test job is shown below:
        ```bash
           curl localhost:5000/jobs/c5f83a04-e2fc-455a-94ca-3258a106f553
        ```
+       
       this will return:
+      
        ```bash
                    {
           "function_name": "correlation",
@@ -590,6 +592,7 @@ As an example, a test job is shown below:
           "status": "in progress"
         }
        ```
+       
    or the status might be completed/submitted.
 
    * To check the results of the job:
@@ -601,7 +604,9 @@ As an example, a test job is shown below:
        ```bash
             Result not found for the specified Job ID. Check completion status of job.
        ```
+       
        or
+     
         ```bash
           {
             "Correlation coefficient between consuming fruits and vegetables less than 5 times per day and coronary heart disease": "Not enough data",
@@ -609,11 +614,13 @@ As an example, a test job is shown below:
             "Correlation coefficient between physical inactivity and coronary heart disease": 0.7849728887395832
           }
        ```
+        
    6. graph_correlation: plots the correlation coefficient across time for different risk factors and the associated disease. 
        * To instantiate a job for graph_correlation:
       ```bash
         curl localhost:5000/jobs/graph_correlation -X "POST" -d '{"breakout":"Overall", "risk_factors": ["Obesity", "Physical Inactivity", "consuming fruits and vegetables less than 5 times per day"], "disease": "Coronary Heart Disease", "location": "Texas"}' -H "Content-Type: application/json
       ```
+      
      Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
  
       This returns:
