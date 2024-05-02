@@ -621,10 +621,10 @@ As an example, a test job is shown below:
         curl localhost:5000/jobs/graph_correlation -X "POST" -d '{"breakout":"Overall", "risk_factors": ["Obesity", "Physical Inactivity", "consuming fruits and vegetables less than 5 times per day"], "disease": "Coronary Heart Disease", "location": "Texas"}' -H "Content-Type: application/json
       ```
       
-     Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
- 
-      This returns:
-      
+       Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
+   
+        This returns:
+        
       ```bash
                  {
       "function_name": "graph_correlation",
@@ -644,7 +644,7 @@ As an example, a test job is shown below:
       }
       ```
 
-    * To check the status of the job:
+      *  To check the status of the job:
        ```bash
           curl localhost:5000/jobs/c5f83a04-e2fc-455a-94ca-3258a106f553
        ```
@@ -668,7 +668,7 @@ As an example, a test job is shown below:
        ```
    or the status might be completed/submitted.
 
-   * To check the results of the job:
+     * To check the results of the job:
      ```bash
         curl localhost:5000/results/5cfc13d7-7ba4-4210-8f9c-4d3319294d83
      ```
@@ -682,7 +682,7 @@ As an example, a test job is shown below:
         ```bash
             "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
        ```
-   * To download the image, use:
+     * To download the image, use:
        ```bash
         curl localhost:5000/download/5cfc13d7-7ba4-4210-8f9c-4d3319294d83 --output out.png
        ```
