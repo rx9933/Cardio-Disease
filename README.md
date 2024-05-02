@@ -291,7 +291,8 @@ The following are various curl commands/routes that can be utilized:
    
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#jobfunctions)
 # Job Functions
-There are currently 3 job functions that can be run. Note that these are in addition to the flask routes detailed in Redis Functionality (1). Each of the commands listed in Job Functionality can be applied to each of the 4 jobs (test_work, return_topics, max_affected, and graph_rf). *Note*: for the example routes shown below, the job id should be replaced with the job id that the user's receive to screen. 
+There are currently 5 job functions that can be run. Note that these are in addition to the flask routes detailed in Redis Functionality (1). Each of the commands listed in Job Functionality can be applied to each of the 5 main jobs (return_topics, max_affected, graph_rf, graph_correlation, and correlation). *Note*: for the example routes shown below, the job id should be replaced with the job id that the user's receive to screen. 
+As an example, a test job is shown below: 
 1. test_work: this function is just a work simulation. No real analysis is performed; the worker just sleeps for 20 seconds before returning a random output.
       * To instantiate a job for return_topics:
    ```bash
@@ -468,7 +469,7 @@ There are currently 3 job functions that can be run. Note that these are in addi
       Result not found for the specified Job ID. Check completion status of job.
    ```
 
-4. graph_rf:
+4. graph_rf: graphs the time series of a given disease alongside the time series of several associated risk factors (as specified by the users).
   
    * To instantiate a job for max_affected:
       ```bash
@@ -532,7 +533,7 @@ There are currently 3 job functions that can be run. Note that these are in addi
        ```
        This will download a png image of the graph to your terminal. For easy viewing, performing these steps (submitting and downloading the job) via the Kubernetes platform (detailed below), so that the image can be loaded directly on your computer.
 
-  5.  correlation
+  5.  correlation: calculates the coefficient coefficient between the user-specified disease and various risk factors. 
   * To instantiate a job for max_affected:
       ```bash
       curl localhost:5000/jobs/correlation -X "POST" -d '{"breakout":"Overall", "risk_factors": ["Obesity", "Physical Inactivity", "consuming fruits and vegetables less than 5 times per day"], "disease": "Coronary Heart Disease", "location": "Texas"}' -H "Content-Type: application/json"
@@ -599,7 +600,7 @@ There are currently 3 job functions that can be run. Note that these are in addi
             "Correlation coefficient between physical inactivity and coronary heart disease": 0.7849728887395832
           }
        ```
-   6. graph_correlation
+   6. graph_correlation: plots the correlation coefficient across time for different risk factors and the associated disease. 
        * To instantiate a job for graph_correlation:
       ```bash
         curl localhost:5000/jobs/graph_correlation -X "POST" -d '{"breakout":"Overall", "risk_factors": ["Obesity", "Physical Inactivity", "consuming fruits and vegetables less than 5 times per day"], "disease": "Coronary Heart Disease", "location": "Texas"}' -H "Content-Type: application/json
