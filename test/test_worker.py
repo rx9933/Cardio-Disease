@@ -5,6 +5,14 @@ from worker import return_topics, max_affected, graph_rf, select_series, plot_da
 from textwrap import wrap
 
 def test_return_topics() -> None:
+    """
+    Tests the return topics function in the worker.py
+    Returns:
+       None
+    Args:
+       None
+    """
+    
     response = requests.post('http://localhost:5000/data')
     response = requests.post('http://localhost:5000/jobs/return_topics', json={})
 
@@ -24,6 +32,14 @@ def test_return_topics() -> None:
     assert isinstance(response.json()[0], str)
 
 def test_max_affected() -> None:
+    """
+    Tests the max affected function in the worker.py
+    Returns:
+       None
+    Args:
+       None
+    """
+    
     response = requests.post('http://localhost:5000/jobs/max_affected', json={})
 
     assert response.status_code == 200
@@ -49,7 +65,14 @@ def test_max_affected() -> None:
     assert response.json()["topic"] == "Stroke"
     assert response.json()["break_out"] == "65+"
 
-def test_graph_rf():
+def test_graph_rf() -> None:
+    """
+    Tests the graph risk facts vs disease function in the worker.py
+    Returns:
+       None
+    Args:
+       None
+    """
     response = requests.post('http://localhost:5000/jobs/graph_rf', json={})
 
     assert response.status_code == 200
@@ -76,7 +99,15 @@ def test_graph_rf():
     response = requests.get(f'http://localhost:5000/results/{job_id}').json()
     assert response == f"Image is available for download with the route /download/{job_id}"
 
-def test_select_series():
+def test_select_series() -> None:
+    """
+    Tests the select series (helper) function in the worker.py
+    Returns:
+       None
+    Args:
+       None
+    """
+    
     out = select_series("Colorado", "65+", "Stroke")
     assert isinstance(out, dict)
     assert out == {'2013': '5.9', '2014': '5.5', '2015': '7', '2019': '5', '2016': '6.2', '2011': '5.7', '2017': '5.6', '2012': '5.9'}
@@ -85,13 +116,22 @@ def test_select_series():
     assert isinstance(out, dict)
     assert out == {}
 
-def test_detrend_data():
+def test_detrend_data() -> None:
+    """
+    Tests the detrend data (helper) function in the worker.py
+    Returns:
+       None
+    Args:
+       None
+    """
+    
     xy = {0.5: 9.25, 1: 7.6, 1.5: 8.25, 2: 6.5, 2.5: 5.45, 3: 4.5, 3.5: 1.75, 4: 1.8}
     assert isinstance(detrend_data(xy), dict)
     assert abs(detrend_data(xy)[0.5] - (9.25 - (10.657 - 2.231*0.5))) <= .1
     assert isinstance(detrend_data(xy)[2], float)
 
-def test_calculate_correlation():
+def test_calculate_correlation() -> None:
+    
     x = [1, 2, 3, 4, 5]
     y = [1, 2, 3, 4, 5]
     x2 = [43, 21, 25, 42, 57, 59]
@@ -99,7 +139,15 @@ def test_calculate_correlation():
     assert calculate_correlation(x, y) == 1.0
     assert abs(calculate_correlation(x2, y2) - 0.5298) <=.1
 
-def test_graph_correlation():
+def test_graph_correlation() -> None:
+    """
+    Tests the graph correlation between risk factors and disease function in the worker.py
+    Returns:
+       None
+    Args:
+       None
+    """
+    
     response = requests.post('http://localhost:5000/jobs/graph_correlation', json={})
 
     assert response.status_code == 200
@@ -122,7 +170,15 @@ def test_graph_correlation():
     response = requests.get(f'http://localhost:5000/results/{job_id}').json()
     assert response == f"Image is available for download with the route /download/{job_id}"
 
-def test_correlation():
+def test_correlation() -> None:
+    """
+    Tests the correlation function (between risk factors and disease) in the worker.py
+    Returns:
+       None
+    Args:
+       None
+    """
+    
     response = requests.post('http://localhost:5000/jobs/correlation', json={})
 
     assert response.status_code == 200
