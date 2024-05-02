@@ -251,8 +251,8 @@ The following are various curl commands/routes that can be utilized:
     "Male",
     "18-24",
     "20-24"
-  ]
-  ```
+    ]
+    ```
     These are the different break_out categories. 
    
     *Note*: Data on Redis is required for any data analysis; that is how the worker.py gets the data as input. As such, data deletion is not advised to be performed before adding/curling job requests. Doing so will result in empty/uninteresting results as output. 
