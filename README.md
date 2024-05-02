@@ -518,27 +518,31 @@ As an example, a test job is shown below:
    ```bash
       curl localhost:5000/results/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
    ```
+   
+       this will return:
+   
+   ```bash
+        Result not found for the specified Job ID. Check completion status of job.
+   ```
      
-      this will return:
-     ```bash
-          Result not found for the specified Job ID. Check completion status of job.
-     ```
        or
-      ```bash
-          "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
-     ```
+   
+    ```bash
+        "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
+    ```
    * To download the image, use:
+   * 
    ```bash
     curl localhost:5000/download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4 --output out.png
    ```
-       This will download a png image of the graph to your terminal. For easy viewing, performing these steps (submitting and downloading the job) via the Kubernetes platform (detailed below), so that the image can be loaded directly on your computer.
-     
-       An example of this image is shown below:
+     This will download a png image of the graph to your terminal. For easy viewing, performing these steps (submitting and downloading the job) via the Kubernetes platform (detailed below), so that the image can be loaded directly on your computer.
+   
+     An example of this image is shown below:
 
-       ![plot](images/graphrf_ex.png)
+     ![plot](images/graphrf_ex.png)
      
 
-  5.  correlation: calculates the coefficient coefficient between the user-specified disease and various risk factors. 
+  6.  correlation: calculates the coefficient coefficient between the user-specified disease and various risk factors. 
   * To instantiate a job for max_affected:
       ```bash
       curl localhost:5000/jobs/correlation -X "POST" -d '{"breakout":"Overall", "risk_factors": ["Obesity", "Physical Inactivity", "consuming fruits and vegetables less than 5 times per day"], "disease": "Coronary Heart Disease", "location": "Texas"}' -H "Content-Type: application/json"
