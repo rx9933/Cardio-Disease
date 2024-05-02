@@ -593,7 +593,7 @@ As an example, a test job is shown below:
         }
        ```
        
-     or the status might be completed/submitted.
+       or the status might be completed/submitted.
 
        * To check the results of the job:
        ```bash
