@@ -533,6 +533,12 @@ As an example, a test job is shown below:
        ```
        This will download a png image of the graph to your terminal. For easy viewing, performing these steps (submitting and downloading the job) via the Kubernetes platform (detailed below), so that the image can be loaded directly on your computer.
 
+     
+       An example of this image is shown below:
+
+       ![plot](images/graph_rfex.png)
+     
+
   5.  correlation: calculates the coefficient coefficient between the user-specified disease and various risk factors. 
   * To instantiate a job for max_affected:
       ```bash
@@ -671,7 +677,10 @@ As an example, a test job is shown below:
        ```
        This will download a png image of the graph to your terminal. For easy viewing, performing these steps (submitting and downloading the job) via the Kubernetes platform (detailed below), so that the image can be loaded directly on your computer.
 
-   
+       An example of this image is shown below:
+
+       ![plot](images/correlation_graph.png)
+     
 # Using Kubernetes
 If Kubernetes is launched correctly, all commands as described in Routes and Jobs can be written from the a local terminal (which does not have docker or kubernetes installed). Additionally, all get requests can be launched from the internet. Post or delete requests can also be launched from the internet if an API like Postman is used.
 Note that any commands written through localhost are not recorded on the kubernetes cluster; all commands written from the local terminal or on the internet will be recorded on the kubernetes cluster. 
