@@ -472,70 +472,70 @@ As an example, a test job is shown below:
 4. graph_rf: graphs the time series of a given disease alongside the time series of several associated risk factors (as specified by the users).
   
    * To instantiate a job for max_affected:
-      ```bash
-      curl localhost:5000/jobs/graph_rf -X POST -d '{"disease":"stroke", "risk_factors":["current smoking"], "location":"Texas", "breakout_params":"65+"}' -H "Content-Type: application/json"
-      ```
+    ```bash
+    curl localhost:5000/jobs/graph_rf -X POST -d '{"disease":"stroke", "risk_factors":["current smoking"], "location":"Texas", "breakout_params":"65+"}' -H "Content-Type: application/json"
+    ```
      Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
  
       This returns:
-      ```bash
-            {
-        "function_name": "graph_rf",
-        "id": "0f0f6371-c837-4e65-a918-e0b3b74b1bd4",
-        "input_parameters": {
-          "disease": "stroke",
-          "location": "Texas",
-          "risk_factors": [
-            "current smoking"
-          ]
-        },
-        "status": "submitted"
-      }
-      ```
+    ```bash
+          {
+      "function_name": "graph_rf",
+      "id": "0f0f6371-c837-4e65-a918-e0b3b74b1bd4",
+      "input_parameters": {
+        "disease": "stroke",
+        "location": "Texas",
+        "risk_factors": [
+          "current smoking"
+        ]
+      },
+      "status": "submitted"
+    }
+    ```
 
     * To check the status of the job:
-       ```bash
-          curl localhost:5000/jobs/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
-       ```
+     ```bash
+        curl localhost:5000/jobs/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
+     ```
       this will return:
-       ```bash
-               {
-            "function_name": "graph_rf",
-            "id": "0f0f6371-c837-4e65-a918-e0b3b74b1bd4",
-            "input_parameters": {
-              "disease": "stroke",
-              "location": "Texas",
-              "risk_factors": [
-                "current smoking"
-              ]
-            },
-            "status": "in progress"
-          }
-       ```
+     ```bash
+             {
+          "function_name": "graph_rf",
+          "id": "0f0f6371-c837-4e65-a918-e0b3b74b1bd4",
+          "input_parameters": {
+            "disease": "stroke",
+            "location": "Texas",
+            "risk_factors": [
+              "current smoking"
+            ]
+          },
+          "status": "in progress"
+        }
+     ```
    or the status might be completed/submitted.
 
    * To check the results of the job:
-     ```bash
-        curl localhost:5000/results/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
-     ```
+   ```bash
+      curl localhost:5000/results/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
+   ```
      
       this will return:
-       ```bash
-            Result not found for the specified Job ID. Check completion status of job.
-       ```
+     ```bash
+          Result not found for the specified Job ID. Check completion status of job.
+     ```
        or
-        ```bash
-            "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
-       ```
+      ```bash
+          "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
+     ```
    * To download the image, use:
-       ```bash
-        curl localhost:5000/download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4 --output out.png
-       ```
+     ```bash
+      curl localhost:5000/download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4 --output out.png
+     ```
        This will download a png image of the graph to your terminal. For easy viewing, performing these steps (submitting and downloading the job) via the Kubernetes platform (detailed below), so that the image can be loaded directly on your computer.
      
        An example of this image is shown below:
 
-       ![plot](images/graph_rfex.png)
+       ![plot](images/graphrf_ex.png)
      
 
   5.  correlation: calculates the coefficient coefficient between the user-specified disease and various risk factors. 
