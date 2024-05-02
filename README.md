@@ -670,18 +670,19 @@ As an example, a test job is shown below:
       or the status might be completed/submitted.
 
        * To check the results of the job:
-     ```bash
-        curl localhost:5000/results/5cfc13d7-7ba4-4210-8f9c-4d3319294d83
-     ```
+         
+       ```bash
+          curl localhost:5000/results/5cfc13d7-7ba4-4210-8f9c-4d3319294d83
+       ```
      
       this will return:
        ```bash
-            Result not found for the specified Job ID. Check completion status of job.
+          Result not found for the specified Job ID. Check completion status of job.
        ```
        or
      
        ```bash
-            "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
+          "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
        ```
          
        * To download the image, use:
