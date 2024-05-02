@@ -145,18 +145,6 @@ def test_add_and_delete_job() -> None:
     logging.error(f"{requests.get(f'http://localhost:5000/jobs/{job_id}').json()}")
 
 
-    url = 'http://localhost:5000/jobs/correlation'
-    data = {
-        'breakout': 'Overall',
-        'risk_factors': ['Obesity', 'Physical Inactivity', 'consuming fruits and vegetables less than 5 times per day'],
-        'disease': 'Coronary Heart Disease',
-        'location': 'Texas'
-    }
-    headers = {'Content-Type': 'application/json'}
-    
-    response = requests.post(url, json=data, headers=headers)
-    assert add_response.status_code == 200
-
     # Delete all jobs
     delete_response = requests.delete('http://localhost:5000/jobs/delete')
     assert delete_response.status_code == 200
@@ -167,6 +155,20 @@ def test_add_and_delete_job() -> None:
     job_status_response = requests.get(f'http://localhost:5000/jobs/{job_id}')
     assert job_status_response.status_code == 200
     assert job_status_response.json() == {"error": "job not found"}
+
+    # add a correlation job
+    url = 'http://localhost:5000/jobs/correlation'
+    data = {
+        'breakout': 'Overall',
+        'risk_factors': ['Obesity', 'Physical Inactivity', 'consuming fruits and vegetables less than 5 times per day'],
+        'disease': 'Coronary Heart Disease',
+        'location': 'Texas'
+    }
+    headers = {'Content-Type': 'application/json'}
+
+    response = requests.post(url, json=data, headers=headers)
+    assert add_response.status_code == 200
+    
 
 def test_post_data() -> None:
     """
@@ -227,8 +229,8 @@ def test_all_categories() -> None:
     assert isinstance(response.json(), list)
 
 def test_download_job() -> None:
-     """
-    Tests all_categories function in api.py.
+    """
+    Tests download job function in api.py.
 
     Returns:
        None
@@ -236,14 +238,8 @@ def test_download_job() -> None:
     Args:
        None
     """
-    
     url = 'http://localhost:5000/jobs/graph_rf'
-    data = {
-    'disease': 'stroke',
-    'risk_factors': ['current smoking'],
-    'location': 'Texas',
-    'breakout_params': '65+'
-        }
+    data = {'disease': 'stroke', 'risk_factors': ['current smoking'], 'location': 'Texas','breakout_params': '65+'}
     
     headers = {'Content-Type': 'application/json'}
     
