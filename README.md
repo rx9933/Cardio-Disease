@@ -67,7 +67,7 @@ git clone git@github.com:rx9933/COE-332-Homework.git
 2. Navigate to this directory (homework08). 
 3. To run program:
 ```bash
-docker-compose up -d
+docker-compose up --build -d
 ```
 Leave the program running while proceeding with Making Requests to Container. Only use "To stop program" when done interacting with app.
 
@@ -736,7 +736,7 @@ dd90c9d27722   redis:7                     "docker-entrypoint.s…"   20 seconds
 docker exec -it d3d4d32bb5bc pytest
 ```
 Replace d3d4d32bb5bc with the api container id as found in the previous step.
-Due to the large number of tests being done, the test command may take around 7 minutes to complete.
+Due to the large number of tests being done, the test command may take around 18 minutes to complete.
 Note: a different terminal (as long as it has Docker installed and has been navigated to the homework08 directory) can run the <pytest> command, as long as the docker image has been correctly pulled and is running (view "To Build Image").
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#debugging)
