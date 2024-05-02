@@ -472,7 +472,7 @@ There are currently 3 job functions that can be run. Note that these are in addi
   
    * To instantiate a job for max_affected:
       ```bash
-      curl localhost:5000/jobs/graph_rf -X POST -d '{"disease":"Stroke", "risk_factors":["Smoking"], "location":"Texas", "breakout_params":"65+"}' -H "Content-Type: application/json"
+      curl localhost:5000/jobs/graph_rf -X POST -d '{"disease":"stroke", "risk_factors":["current smoking"], "location":"Texas", "breakout_params":"65+"}' -H "Content-Type: application/json"
       ```
      Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
  
@@ -482,10 +482,10 @@ There are currently 3 job functions that can be run. Note that these are in addi
         "function_name": "graph_rf",
         "id": "0f0f6371-c837-4e65-a918-e0b3b74b1bd4",
         "input_parameters": {
-          "disease": "Stroke",
+          "disease": "stroke",
           "location": "Texas",
           "risk_factors": [
-            "Smoking"
+            "current smoking"
           ]
         },
         "status": "submitted"
@@ -502,10 +502,10 @@ There are currently 3 job functions that can be run. Note that these are in addi
             "function_name": "graph_rf",
             "id": "0f0f6371-c837-4e65-a918-e0b3b74b1bd4",
             "input_parameters": {
-              "disease": "Stroke",
+              "disease": "stroke",
               "location": "Texas",
               "risk_factors": [
-                "Smoking"
+                "current smoking"
               ]
             },
             "status": "in progress"
@@ -528,10 +528,148 @@ There are currently 3 job functions that can be run. Note that these are in addi
        ```
    * To download the image, use:
        ```bash
-        curl localhost:5000/download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4
+        curl localhost:5000/download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4 --output out.png
        ```
        This will download a png image of the graph to your terminal. For easy viewing, performing these steps (submitting and downloading the job) via the Kubernetes platform (detailed below), so that the image can be loaded directly on your computer.
-       
+
+  5.  correlation
+  * To instantiate a job for max_affected:
+      ```bash
+      curl localhost:5000/jobs/correlation -X "POST" -d '{"breakout":"Overall", "risk_factors": ["Obesity", "Physical Inactivity", "consuming fruits and vegetables less than 5 times per day"], "disease": "Coronary Heart Disease", "location": "Texas"}' -H "Content-Type: application/json"
+      ```
+     Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
+ 
+      This returns:
+      ```bash
+                 {
+        "function_name": "correlation",
+        "id": "c5f83a04-e2fc-455a-94ca-3258a106f553",
+        "input_parameters": {
+          "breakout": "Overall",
+          "disease": "Coronary Heart Disease",
+          "location": "Texas",
+          "risk_factors": [
+            "Obesity",
+            "Physical Inactivity",
+            "consuming fruits and vegetables less than 5 times per day"
+          ]
+        },
+        "status": "submitted"
+      }
+      ```
+
+    * To check the status of the job:
+       ```bash
+          curl localhost:5000/jobs/c5f83a04-e2fc-455a-94ca-3258a106f553
+       ```
+      this will return:
+       ```bash
+                   {
+          "function_name": "correlation",
+          "id": "c5f83a04-e2fc-455a-94ca-3258a106f553",
+          "input_parameters": {
+            "breakout": "Overall",
+            "disease": "Coronary Heart Disease",
+            "location": "Texas",
+            "risk_factors": [
+              "Obesity",
+              "Physical Inactivity",
+              "consuming fruits and vegetables less than 5 times per day"
+            ]
+          },
+          "status": "in progress"
+        }
+       ```
+   or the status might be completed/submitted.
+
+   * To check the results of the job:
+     ```bash
+        curl localhost:5000/results/c5f83a04-e2fc-455a-94ca-3258a106f553
+     ```
+     
+      this will return:
+       ```bash
+            Result not found for the specified Job ID. Check completion status of job.
+       ```
+       or
+        ```bash
+          {
+            "Correlation coefficient between consuming fruits and vegetables less than 5 times per day and coronary heart disease": "Not enough data",
+            "Correlation coefficient between obesity and coronary heart disease": 0.38723599856793467,
+            "Correlation coefficient between physical inactivity and coronary heart disease": 0.7849728887395832
+          }
+       ```
+   6. graph_correlation
+       * To instantiate a job for graph_correlation:
+      ```bash
+        curl localhost:5000/jobs/graph_correlation -X "POST" -d '{"breakout":"Overall", "risk_factors": ["Obesity", "Physical Inactivity", "consuming fruits and vegetables less than 5 times per day"], "disease": "Coronary Heart Disease", "location": "Texas"}' -H "Content-Type: application/json
+      ```
+     Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
+ 
+      This returns:
+        ```bash
+                   {
+        "function_name": "graph_correlation",
+        "id": "5cfc13d7-7ba4-4210-8f9c-4d3319294d83",
+        "input_parameters": {
+          "breakout": "Overall",
+          "disease": "Coronary Heart Disease",
+          "location": "Texas",
+          "risk_factors": [
+            "Obesity",
+            "Physical Inactivity",
+            "consuming fruits and vegetables less than 5 times per day"
+          ]
+        },   
+        "
+         "status": "submitted"
+        }
+      ```
+
+    * To check the status of the job:
+       ```bash
+          curl localhost:5000/jobs/c5f83a04-e2fc-455a-94ca-3258a106f553
+       ```
+      this will return:
+       ```bash
+                   {
+          "function_name": "graph_correlation",
+          "id": "5cfc13d7-7ba4-4210-8f9c-4d3319294d83",
+          "input_parameters": {
+            "breakout": "Overall",
+            "disease": "Coronary Heart Disease",
+            "location": "Texas",
+            "risk_factors": [
+              "Obesity",
+              "Physical Inactivity",
+              "consuming fruits and vegetables less than 5 times per day"
+            ]
+          },
+          "status": "in progress"
+        }
+       ```
+   or the status might be completed/submitted.
+
+   * To check the results of the job:
+     ```bash
+        curl localhost:5000/results/5cfc13d7-7ba4-4210-8f9c-4d3319294d83
+     ```
+     
+      this will return:
+       ```bash
+            Result not found for the specified Job ID. Check completion status of job.
+       ```
+       or
+     
+        ```bash
+            "Image is available for download with the route /download/0f0f6371-c837-4e65-a918-e0b3b74b1bd4"
+       ```
+   * To download the image, use:
+       ```bash
+        curl localhost:5000/download/5cfc13d7-7ba4-4210-8f9c-4d3319294d83 --output out.png
+       ```
+       This will download a png image of the graph to your terminal. For easy viewing, performing these steps (submitting and downloading the job) via the Kubernetes platform (detailed below), so that the image can be loaded directly on your computer.
+
    
 # Using Kubernetes
 If Kubernetes is launched correctly, all commands as described in Routes and Jobs can be written from the a local terminal (which does not have docker or kubernetes installed). Additionally, all get requests can be launched from the internet. Post or delete requests can also be launched from the internet if an API like Postman is used.
