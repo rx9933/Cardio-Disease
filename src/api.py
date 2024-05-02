@@ -132,7 +132,7 @@ def submit_job(functName:str):
             logger.warning("Invalid parameters")
             return jsonify({"Error": f"Invalid parameters for graph_rf in {paras}"})
         # Check if the sorted keys contains at least disease and risk factor
-        if ('risk_factors' not in keys_set) and ('disease' not in keys_set):
+        if ('risk_factors' not in keys_set) or ('disease' not in keys_set):
             logger.warning("Must contain disease and risk_factors")
             return jsonify({"Error": f"Parameters must contain 'disease' and 'risk_factors'"})
         # test if brekaout is a valid breakout
