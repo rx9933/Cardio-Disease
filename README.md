@@ -67,7 +67,7 @@ git clone git@github.com:rx9933/COE-332-Homework.git
 2. Navigate to this directory (homework08). 
 3. To run program:
 ```bash
-docker-compose up -d
+docker-compose up --build -d
 ```
 Leave the program running while proceeding with Making Requests to Container. Only use "To stop program" when done interacting with app.
 
