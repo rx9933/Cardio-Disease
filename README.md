@@ -475,7 +475,7 @@ As an example, a test job is shown below:
     ```bash
     curl localhost:5000/jobs/graph_rf -X POST -d '{"disease":"stroke", "risk_factors":["current smoking"], "location":"Texas", "breakout_params":"65+"}' -H "Content-Type: application/json"
     ```
-     Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
+     Note that the disease and risk_factors are required parameters to be input. location and breakout_params are optional values. There is also a "detrend" flag that can be sent to "True" or "False"; it is automatically initialized as False. Also note that multiple risk factors can be analyzed at a single time; simply add to the list of risk_factors: "risk_factors":["Smoking", "Physical Inactivity"].   
  
       This returns:
     ```bash
@@ -540,9 +540,21 @@ As an example, a test job is shown below:
      An example of this image is shown below:
 
      ![plot](images/graphrf_ex.png)
+
+    An example of the trended graph is:
+   
+    ![plot](images/chd_undetrended.png)
+   
+    
+    An example of the detrended graph is:
+
+    ![plot](images/chd_detrended.png)
+
+   
+     
      
 
-  5.  correlation: calculates the coefficient coefficient between the user-specified disease and various risk factors. 
+  6.  correlation: calculates the coefficient coefficient between the user-specified disease and various risk factors. 
     * To instantiate a job for max_affected:
       ```bash
       curl localhost:5000/jobs/correlation -X "POST" -d '{"breakout":"Overall", "risk_factors": ["Obesity", "Physical Inactivity", "consuming fruits and vegetables less than 5 times per day"], "disease": "Coronary Heart Disease", "location": "Texas"}' -H "Content-Type: application/json"
@@ -615,7 +627,7 @@ As an example, a test job is shown below:
           }
        ```
         
-   6. graph_correlation: plots the correlation coefficient across time for different risk factors and the associated disease. 
+   7. graph_correlation: plots the correlation coefficient across time for different risk factors and the associated disease. 
        * To instantiate a job for graph_correlation:
       ```bash
         curl localhost:5000/jobs/graph_correlation -X "POST" -d '{"breakout":"Overall", "risk_factors": ["Obesity", "Physical Inactivity", "consuming fruits and vegetables less than 5 times per day"], "disease": "Coronary Heart Disease", "location": "Texas"}' -H "Content-Type: application/json
