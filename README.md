@@ -728,6 +728,7 @@ On the internet, simply use the ingress host name (followed by, optionally, the 
 cardio-app.coe332.tacc.cloud/jobs
 ```
 Note that the data posting route may return a Gateway Timeout error. The data will still be posted to the redis instance on the kubernetes cluster. 
+Also note that some of the graph functions (or lengthy analysis functions) might also have a gateway timeout error when posting the job. The job will still be posted; simply curl the list of jobs at /jobs and use the respective job id. 
 
 [![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/cloudy.png)](#unittesting)
 # Unit Testing
