@@ -64,7 +64,7 @@ This image shows the various files and how the interact with the user (via flask
 ```bash
 git clone git@github.com:rx9933/Cardio-Disease.git
 ```
-2. Navigate to this directory (homework08). 
+2. Navigate to this directory. 
 3. To run program:
 ```bash
 docker-compose up --build -d
